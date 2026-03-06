@@ -1,80 +1,109 @@
-# 🌾 TaniTrade Digital 
-
+# 🌾 TaniTrade Digital  
 **Bursa Komoditas Digital & Buku Besar Finansial Petani Modern Indonesia**
 
 [![Buka Aplikasi](https://img.shields.io/badge/📱_Buka_Aplikasi_(Web_/_APK)-10B981?style=for-the-badge)](https://tanitrade.netlify.app/)
 
 ---
 
-## 🌐 Coba Langsung (Live Demo & APK)
+## 🌐 Live Demo & Instalasi Aplikasi
 
-Anda dapat langsung melihat, mencoba, atau menginstal aplikasi ini ke HP Anda (sebagai APK/PWA) melalui tautan resmi berikut:
+Anda dapat langsung mencoba aplikasi atau menginstalnya ke smartphone sebagai **PWA/APK** melalui tautan resmi berikut:
 
-👉 **[https://tanitrade.netlify.app/](https://tanitrade.netlify.app/)**
+👉 **https://tanitrade.netlify.app/**
 
 ---
 
 ## 📖 Deskripsi Proyek (About The Project)
 
-**TaniTrade** lahir dari keresahan akan panjangnya rantai pasok pertanian di Indonesia yang seringkali membuat petani mendapatkan harga jual yang sangat rendah, sementara konsumen akhir membayar dengan harga tinggi. 
+**TaniTrade** lahir dari keresahan akan panjangnya rantai pasok pertanian di Indonesia yang sering membuat petani mendapatkan harga jual rendah, sementara konsumen akhir membayar harga tinggi.
 
-Aplikasi ini **bukan sekadar *e-commerce* biasa**, melainkan sebuah **Bursa Komoditas Dua Arah** dan **Sistem Akuntansi Pribadi** yang dirancang khusus untuk petani lokal. Dengan TaniTrade, petani tidak lagi harus menunggu tengkulak datang ke ladang. Mereka bisa secara aktif memantau harga pasar global, melacak pabrik atau supermarket terdekat yang sedang membutuhkan pasokan (sistem radar), melakukan negosiasi harga secara *real-time*, hingga mencatat setiap keuntungan dan kerugian (HPP vs Harga Jual) dalam satu buku besar (*ledger*) digital yang rapi.
+Aplikasi ini **bukan sekadar e-commerce biasa**, melainkan:
 
-## 🎯 Permasalahan yang Diselesaikan (The Solutions)
+### ✅ Bursa Komoditas Dua Arah  
+Petani dapat menjual **dan** membeli komoditas langsung tanpa tengkulak.
 
-1. **Memotong Rantai Pasok (Supply Chain Cut):** Menghubungkan petani langsung dengan pembeli skala besar (Pabrik, Grosir, Supermarket/B2B) tanpa perantara ganda.
-2. **Transparansi Harga:** Memberikan akses data harga bursa komoditas secara *real-time* agar petani memiliki daya tawar yang kuat.
-3. **Manajemen Finansial Buta Huruf:** Banyak petani tidak menghitung *Harga Pokok Produksi (HPP)*. Fitur "Profil & Buku Besar" secara otomatis mengkalkulasi apakah panen tersebut profit, rugi, atau sekadar balik modal (BEP).
-4. **Kepastian Penjualan (Radar Permintaan):** Petani tahu persis siapa yang butuh barangnya dan berapa jaraknya melalui fitur "Permintaan Pasar".
+### ✅ Sistem Akuntansi & Buku Besar Digital  
+Petani dapat mencatat modal, pendapatan, laba-rugi, hingga analisis usaha secara otomatis.
+
+### ✅ Radar Permintaan Pasar  
+Petani dapat menemukan pembeli terdekat yang sedang membutuhkan pasokan.
+
+Dengan TaniTrade, petani dapat:
+
+- Memantau harga pasar global secara real-time  
+- Menemukan pembeli terdekat berbasis radius lokasi  
+- Melakukan negosiasi harga langsung  
+- Menyimpan histori transaksi secara digital  
+- Menghitung HPP, BEP, laba, dan rugi otomatis  
+
+---
+
+## 🎯 Permasalahan yang Diselesaikan (Solutions)
+
+### 1️⃣ Memotong Rantai Pasok  
+Menghubungkan petani langsung dengan pembeli skala besar tanpa perantara berlapis.
+
+### 2️⃣ Transparansi Harga  
+Menyediakan data harga komoditas real-time agar petani memiliki daya tawar yang kuat.
+
+### 3️⃣ Manajemen Finansial Lemah  
+Fitur Buku Besar otomatis menghitung HPP, laba, rugi, dan BEP.
+
+### 4️⃣ Kepastian Penjualan  
+Fitur Radar Permintaan membantu petani mengetahui siapa yang membutuhkan barang dan lokasinya.
 
 ---
 
 ## ✨ Fitur Unggulan (Core Features)
 
-Aplikasi ini dibagi menjadi 6 modul utama yang saling terintegrasi:
+Aplikasi dibagi menjadi **6 modul utama** yang saling terintegrasi:
 
-1. 🏠 **Dashboard Utama (`index.html`)**
-   - Ringkasan aktivitas akun dan status level petani (Contoh: Petani Unggul).
-   - Akses cepat ke radar pesanan terdekat dan pantauan pergerakan harga bursa global.
-   - Histori transaksi keluar-masuk secara ringkas.
+### 🏠 Dashboard Utama (`index.html`)
+- Ringkasan aktivitas akun & level petani  
+- Akses cepat radar pesanan terdekat  
+- Pantauan harga bursa global  
+- Histori transaksi ringkas  
 
-2. 📈 **Bursa Harga (`bursa.html`)**
-   - Tampilan pergerakan persentase harga komoditas (Sayuran, Bumbu, Biji-bijian, Buah) secara *real-time*.
-   - Aksi cepat untuk mengeksekusi "Jual" atau "Beli" sesuai harga pasar hari ini.
+### 📈 Bursa Harga (`bursa.html`)
+- Pergerakan harga komoditas real-time  
+- Eksekusi cepat aksi Jual & Beli  
 
-3. 📡 **Permintaan Pasar / Radar Pesanan (`pesanan.html`)**
-   - Sistem radar *Live* dengan visualisasi *Masonry Grid* modern.
-   - Mendeteksi kebutuhan pabrik dan restoran di sekitar berdasarkan radius Km (Terdapat indikator Urgent, Kontrak, Reguler).
-   - Fitur filter kategori dan tombol "Tawarkan Stok" langsung ke pembeli.
+### 📡 Radar Permintaan Pasar (`pesanan.html`)
+- Sistem radar live berbasis radius lokasi  
+- Indikator permintaan (Urgent, Kontrak, Reguler)  
+- Filter kategori & tombol Tawarkan Stok langsung  
 
-4. 📦 **Manajemen Stok (`stok.html`)**
-   - Gudang digital untuk mencatat hasil panen dengan status: Siap Jual, Masa Tanam, dan Dalam Proses.
-   - Terdapat *Progress bar* visual untuk melihat sisa stok.
-   - Analisis otomatis per-item untuk melihat **Modal (HPP)**, kuantitas terjual, dan status **Profit / Rugi**.
+### 📦 Manajemen Stok (`stok.html`)
+- Gudang digital hasil panen  
+- Status: Siap Jual, Masa Tanam, Dalam Proses  
+- Progress bar visual sisa stok  
+- Analisis otomatis HPP & Profit/Rugi  
 
-5. 🤝 **Ruang Negosiasi (`nego.html`)**
-   - Sistem *Chat Room* interaktif antara petani dan pembeli untuk proses tawar-menawar harga.
-   - Fitur "Sepakat (Deal)" yang akan mengunci harga kontrak.
-   - **Auto-Generate E-Invoice:** Pembuatan Faktur resmi dengan kalkulasi total transaksi, lengkap dengan stempel "LUNAS" dan simulasi unduh PDF.
+### 🤝 Ruang Negosiasi (`nego.html`)
+- Chat interaktif petani & pembeli  
+- Tombol Deal untuk mengunci kontrak  
+- Auto-generate E-Invoice lengkap  
+- Simulasi unduh PDF faktur transaksi  
 
-6. 💼 **Buku Besar Finansial & Profil (`profil.html`)**
-   - Dashboard akuntansi (*Ledger*) tingkat *Enterprise*.
-   - Menampilkan Total Modal, Total Omzet, dan Laba Bersih (Net Profit).
-   - **Data Visualisasi:** Menggunakan *Line Chart* (Tren Keuntungan Bulanan) dan *Doughnut Chart* (Portofolio Komoditas Terjual).
-   - **Tabel Interaktif:** Tabel riwayat transaksi lengkap yang bisa diklik untuk memunculkan detail pop-up / struk per transaksi.
+### 💼 Buku Besar Finansial & Profil (`profil.html`)
+- Dashboard akuntansi digital  
+- Total Modal, Omzet, & Laba Bersih  
+- Grafik Tren Keuntungan Bulanan  
+- Grafik Portofolio Komoditas  
+- Tabel riwayat transaksi interaktif  
 
 ---
 
 ## 🛠️ Teknologi yang Digunakan (Tech Stack)
 
-Proyek ini dibangun murni menggunakan pendekatan *Front-End* modern tanpa *framework* berat, mengutamakan performa dan desain *glassmorphism*:
+Proyek dibangun menggunakan pendekatan **Front-End Modern** tanpa framework berat:
 
-* **HTML5** - Struktur *markup* semantik.
-* **Tailwind CSS** (via CDN) - *Framework* CSS *utility-first* untuk desain *responsive* dan pembuatan komponen UI kelas premium.
-* **Vanilla JavaScript** - Logika DOM, manipulasi pop-up (Modal), kalkulasi *real-time* (seperti perkalian harga & kuantitas), dan simulasi *loading state*.
-* **Chart.js** (via CDN) - Library grafik untuk merender data analitik finansial secara interaktif.
-* **FontAwesome 6** (via CDN) - Kumpulan ikon vektor.
-* **Plus Jakarta Sans** (Google Fonts) - Tipografi modern dengan tingkat keterbacaan tinggi untuk dasbor finansial.
+- **HTML5** — Struktur markup semantik  
+- **Tailwind CSS (CDN)** — Utility-first CSS modern & responsif  
+- **Vanilla JavaScript** — Manipulasi DOM & kalkulasi real-time  
+- **Chart.js (CDN)** — Visualisasi data finansial interaktif  
+- **FontAwesome 6 (CDN)** — Ikon vektor modern  
+- **Google Fonts (Plus Jakarta Sans)** — Tipografi profesional  
 
 ---
 
@@ -82,37 +111,52 @@ Proyek ini dibangun murni menggunakan pendekatan *Front-End* modern tanpa *frame
 
 ```text
 📁 tanitrade/
-├── 📄 index.html      # Halaman Dashboard Utama
-├── 📄 bursa.html      # Halaman Pergerakan Harga Pasar
-├── 📄 pesanan.html    # Halaman Radar Permintaan (Market Demand)
-├── 📄 stok.html       # Halaman Manajemen Inventori & Profit per Item
-├── 📄 nego.html       # Halaman Chat Tawar-menawar & Invoice
-├── 📄 profil.html     # Halaman Buku Besar Finansial, Grafik, & Edit Akun
-├── 📄 README.md       # Dokumentasi Proyek
-└── 📁 assets/         # Folder untuk logo dan aset visual
+├── 📄 index.html
+├── 📄 bursa.html
+├── 📄 pesanan.html
+├── 📄 stok.html
+├── 📄 nego.html
+├── 📄 profil.html
+├── 📄 README.md
+└── 📁 assets/
     ├── logo.png
     ├── logoseo.png
     └── banner.png
-
-## 🚀 Cara Menjalankan Proyek (How to Run)
-
-Karena proyek ini berjalan penuh di sisi klien (*client-side*), Anda tidak perlu menginstal Node.js atau *database* apa pun untuk melihat tampilannya secara lokal (Offline):
-
-1. **Clone / Download** *repository* ini ke komputer Anda.
-2. Ekstrak folder hasil *download*.
-3. Anda bisa langsung klik dua kali pada file `index.html` untuk membukanya di *browser* (Chrome, Safari, Edge, dll).
-
-> **💡 Tips:** Untuk pengalaman *development* terbaik (agar *font* dan animasi CSS ter-*load* sempurna tanpa kendala CORS), disarankan membukanya menggunakan ekstensi **Live Server** di Visual Studio Code.
+```
 
 ---
 
-## 📱 Desain Responsif (Mobile-First Approach)
+## 🚀 Cara Menjalankan Proyek
 
-Aplikasi ini menggunakan pendekatan UI/UX adaptif:
+Karena proyek berjalan penuh di sisi klien (client-side), Anda tidak perlu instalasi server atau database.
 
-* **Tampilan Desktop/Tablet:** Menggunakan navigasi *Sidebar* melayang di sebelah kiri yang luas dan elegan.
-* **Tampilan Layar Mobile (HP):** *Sidebar* otomatis disembunyikan dan digantikan dengan **Bottom Navigation Bar** khas aplikasi *native* (iOS/Android), dengan tombol *Floating Action* (Jual) di bagian tengah.
+### Langkah Menjalankan:
+
+1. Clone atau download repository
+2. Ekstrak folder
+3. Buka file `index.html` di browser
+
+💡 **Tips Developer:**  
+Disarankan menggunakan ekstensi **Live Server** di VS Code agar font dan animasi termuat sempurna tanpa kendala CORS.
 
 ---
 
-**Dibuat dengan ❤️ untuk kemajuan Pertanian Digital Indonesia.** **By AETHER CODE | UNMER**
+## 📱 Desain Responsif
+
+Aplikasi dirancang menggunakan pendekatan **Mobile-First UI/UX**:
+
+**Desktop & Tablet**
+- Sidebar navigasi elegan di sisi kiri
+
+**Mobile (Smartphone)**
+- Bottom Navigation Bar seperti aplikasi native
+- Floating Action Button (Jual) di tengah
+
+---
+
+## ❤️ Kontribusi
+
+Proyek ini dibuat untuk mendukung transformasi digital sektor pertanian Indonesia.
+
+**Dikembangkan oleh:**  
+### 🚀 AETHER CODE | UNMER
