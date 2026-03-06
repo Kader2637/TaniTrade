@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil & Finansial - TaniTrade Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.02);
+            border-radius: 1.5rem;
+        }
+
+        .table-row-hover {
+            transition: all 0.2s;
+        }
+
+        .table-row-hover:hover {
+            background-color: #f1f5f9;
+            cursor: pointer;
+            transform: scale(1.001);
+        }
+    </style>
+</head>
+
+<body class="flex h-[100dvh] overflow-hidden text-slate-900 relative">
+
+    <div id="sidebar-overlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden">
+    </div>
+
+    <aside id="main-sidebar"
+        class="fixed lg:static inset-y-0 left-0 w-72 bg-white border-r border-slate-100 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shrink-0 h-full">
+        <div class="h-20 flex items-center justify-between px-8 border-b border-slate-50 shrink-0">
+            <img src="assets/logo.png" alt="Logo" class="h-9 w-auto object-contain">
+            <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-red-500"><i
+                    class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <nav class="flex-1 px-6 py-6 space-y-2 overflow-y-auto hide-scrollbar">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Menu Utama</p>
+            <a href="index.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all"><i
+                    class="fa-solid fa-house-chimney w-5"></i> <span>Dashboard</span></a>
+            <a href="bursa.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all"><i
+                    class="fa-solid fa-chart-line w-5"></i> <span>Bursa Harga</span></a>
+            <a href="pesanan.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all"><i
+                    class="fa-solid fa-bullhorn w-5"></i> <span>Permintaan Pasar</span></a>
+            <a href="stok.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all"><i
+                    class="fa-solid fa-box-open w-5"></i> <span>Stok Saya</span></a>
+            <a href="nego.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all"><i
+                    class="fa-solid fa-handshake w-5"></i> <span>Negosiasi</span></a>
+
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mt-6 mb-4">Pengaturan</p>
+            <a href="profil.html"
+                class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 font-bold rounded-2xl shadow-sm shadow-green-100/50"><i
+                    class="fa-solid fa-circle-user w-5"></i> <span>Profil & Finansial</span></a>
+            <div class="pt-8 px-4">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Radar Sekitar</p>
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                        <span class="text-xs font-bold text-slate-700">12 Petani Aktif</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 leading-relaxed">Siap kirim hasil panen dalam radius 5km hari
+                        ini.</p>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
+       <header
+            class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 z-20 shrink-0 sticky top-0">
+            <button onclick="toggleSidebar()"
+                class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 active:scale-95 transition-all">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+
+            <div class="lg:hidden absolute left-1/2 -translate-x-1/2">
+                <img src="assets/logo.png" alt="TaniTrade" class="h-9 w-auto object-contain">
+            </div>
+
+            <div
+                class="hidden lg:flex items-center gap-4 bg-slate-100 px-4 py-2 rounded-full w-96 focus-within:ring-2 focus-within:ring-green-500 transition-all">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                <input type="text" placeholder="Cari komoditas..."
+                    class="bg-transparent border-none outline-none text-sm w-full">
+            </div>
+
+            <div class="flex items-center gap-2 lg:gap-5">
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 relative">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-slate-200 mx-1 hidden lg:block"></div>
+                <img src="https://img.freepik.com/vektor-gratis/petani-muda-membawa-cangkul-untuk-bekerja-di-sawah_10045-810.jpg" alt="Profile"
+                    class="w-10 h-10 rounded-xl object-cover border-2 border-white shadow-sm">
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 pb-32">
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div
+                    class="premium-card p-6 flex flex-col items-center text-center lg:col-span-1 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-green-600 to-emerald-800 z-0">
+                    </div>
+                    <img src="https://img.freepik.com/vektor-gratis/petani-muda-membawa-cangkul-untuk-bekerja-di-sawah_10045-810.jpg"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg relative z-10 mt-6 mb-3">
+                    <h2 id="profile-name-display" class="text-xl font-black text-slate-800">Abdul kader</h2>
+                    <span
+                        class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-lg uppercase tracking-widest mt-1 mb-4"><i
+                            class="fa-solid fa-certificate mr-1"></i> Petani Unggul</span>
+
+                    <div class="w-full grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 mb-4">
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Rating</p>
+                            <p class="text-sm font-black text-slate-800"><i
+                                    class="fa-solid fa-star text-yellow-400 mr-1"></i> 4.9/5</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Lokasi</p>
+                            <p id="profile-loc-display" class="text-sm font-black text-slate-800 truncate">Kab. Malang
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onclick="openEditProfile()"
+                        class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg hover:bg-slate-800 transition-colors active:scale-95"><i
+                            class="fa-solid fa-pen-to-square mr-1"></i> Edit Profil</button>
+                </div>
+
+                <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="premium-card p-6 flex flex-col justify-center">
+                        <div
+                            class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Modal
+                            Produksi</p>
+                        <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-2">Rp 124.500.000</h3>
+                        <p class="text-xs font-bold text-slate-500">Tahun 2025 - 2026</p>
+                    </div>
+
+                    <div
+                        class="premium-card p-6 flex flex-col justify-center bg-gradient-to-br from-blue-50 to-white border-blue-100">
+                        <div
+                            class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                        </div>
+                        <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Omzet Kotor
+                            Penjualan</p>
+                        <h3 class="text-3xl font-black text-slate-800 tracking-tighter mb-2">Rp 218.450.000</h3>
+                        <p class="text-xs font-bold text-slate-500">Total Nilai Transaksi</p>
+                    </div>
+
+                    <div
+                        class="premium-card p-6 flex flex-col justify-center bg-gradient-to-br from-green-600 to-emerald-800 border-none shadow-xl shadow-green-200/50 relative overflow-hidden">
+                        <div class="absolute -right-10 -top-10 text-white/10 text-9xl"><i
+                                class="fa-solid fa-chart-line"></i></div>
+                        <div class="relative z-10">
+                            <div
+                                class="w-12 h-12 bg-white/20 backdrop-blur-md text-white rounded-2xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                            </div>
+                            <p class="text-[10px] font-black text-green-100 uppercase tracking-widest mb-1">Laba Bersih
+                                (Net Profit)</p>
+                            <h3 class="text-3xl font-black text-white tracking-tighter mb-2">Rp 93.950.000</h3>
+                            <p class="text-xs font-bold text-green-50"><i
+                                    class="fa-solid fa-arrow-trend-up text-green-300 mr-1"></i> Naik 15.4% dari 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="premium-card p-6 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="font-black text-slate-800 text-lg">Tren Keuntungan Bulanan</h3>
+                            <p class="text-xs text-slate-500 font-medium">Pergerakan laba bersih selama 6 Bulan
+                                terakhir.</p>
+                        </div>
+                    </div>
+                    <div class="h-[250px] w-full">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="premium-card p-6 lg:col-span-1">
+                    <div class="mb-4">
+                        <h3 class="font-black text-slate-800 text-lg">Distribusi Komoditas</h3>
+                        <p class="text-xs text-slate-500 font-medium">Berdasarkan volume terjual.</p>
+                    </div>
+                    <div class="h-[200px] w-full relative">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex justify-between text-xs font-bold"><span class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500"></div> Bumbu Dapur
+                            </span><span class="text-slate-800">45%</span></div>
+                        <div class="flex justify-between text-xs font-bold"><span class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-blue-500"></div> Sayuran
+                            </span><span class="text-slate-800">35%</span></div>
+                        <div class="flex justify-between text-xs font-bold"><span class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div> Biji-bijian
+                            </span><span class="text-slate-800">20%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card overflow-hidden">
+                <div
+                    class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h3 class="font-black text-slate-800 text-lg">Buku Besar Transaksi</h3>
+                        <p class="text-xs text-slate-500 font-medium">Klik baris tabel untuk melihat detail invoice.</p>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <input type="text" placeholder="Cari invoice/barang..."
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-green-500 w-full sm:w-64">
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tanggal
+                                </th>
+                                <th class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                    Komoditas & Pembeli</th>
+                                <th class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Qty</th>
+                                <th class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Total
+                                    Modal (HPP)</th>
+                                <th class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Total
+                                    Terjual</th>
+                                <th
+                                    class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">
+                                    Net Margin</th>
+                                <th
+                                    class="p-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+                                    Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260307', '07 Mar 2026', 'Tomat Rose Grade A', 'PT. Saus Nusantara', '500 Kg', '4.500', '8.500', 'Profit', '+Rp 2.000.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">07 Mar 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Tomat Rose Grade A</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-building text-slate-300 mr-1"></i> PT. Saus Nusantara</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">500 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 2.250.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 4.500)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 4.250.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 8.500)</span></td>
+                                <td class="p-4 font-black text-green-600 text-right">+Rp 2.000.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">Profit</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260302', '02 Mar 2026', 'Bawang Merah Kering', 'Grosir Pasar Induk', '1.000 Kg', '30.000', '28.500', 'Rugi', '-Rp 1.500.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">02 Mar 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Bawang Merah Kering</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-store text-slate-300 mr-1"></i> Grosir Pasar Induk</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">1.000 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 30.000.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 30.000)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 28.500.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 28.500)</span></td>
+                                <td class="p-4 font-black text-red-500 text-right">-Rp 1.500.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Rugi</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260228', '28 Feb 2026', 'Beras Pandan Wangi', 'Swalayan Harmoni', '800 Kg', '10.500', '15.000', 'Profit', '+Rp 3.600.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">28 Feb 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Beras Pandan Wangi</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-shop text-slate-300 mr-1"></i> Swalayan Harmoni</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">800 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 8.400.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 10.500)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 12.000.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 15.000)</span></td>
+                                <td class="p-4 font-black text-green-600 text-right">+Rp 3.600.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">Profit</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260215', '15 Feb 2026', 'Kentang Granola', 'Pengepul Lembang', '2.500 Kg', '12.000', '12.000', 'BEP', 'Rp 0')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">15 Feb 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Kentang Granola</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-truck text-slate-300 mr-1"></i> Pengepul Lembang</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">2.500 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 30.000.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 12.000)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 30.000.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 12.000)</span></td>
+                                <td class="p-4 font-black text-slate-400 text-right">Rp 0</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-slate-200 text-slate-600 text-[9px] font-black rounded uppercase">BEP</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260210', '10 Feb 2026', 'Cabai Merah Keriting', 'Pabrik Sambal Ind', '400 Kg', '20.000', '35.000', 'Profit', '+Rp 6.000.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">10 Feb 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Cabai Merah Keriting</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-building text-slate-300 mr-1"></i> Pabrik Sambal Ind</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">400 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 8.000.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 20.000)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 14.000.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 35.000)</span></td>
+                                <td class="p-4 font-black text-green-600 text-right">+Rp 6.000.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">Profit</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260205', '05 Feb 2026', 'Jagung Pipil Kering', 'Pabrik Pakan Subang', '5.000 Kg', '3.500', '5.500', 'Profit', '+Rp 10.000.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">05 Feb 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Jagung Pipil Kering</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-cow text-slate-300 mr-1"></i> Pabrik Pakan Subang</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">5.000 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 17.500.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 3.500)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 27.500.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 5.500)</span></td>
+                                <td class="p-4 font-black text-green-600 text-right">+Rp 10.000.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">Profit</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260120', '20 Jan 2026', 'Bawang Putih Lokal', 'Tengkulak Pasar', '300 Kg', '32.000', '28.000', 'Rugi', '-Rp 1.200.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">20 Jan 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Bawang Putih Lokal</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-user-tie text-slate-300 mr-1"></i> Tengkulak Pasar</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">300 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 9.600.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 32.000)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 8.400.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 28.000)</span></td>
+                                <td class="p-4 font-black text-red-500 text-right">-Rp 1.200.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-red-100 text-red-700 text-[9px] font-black rounded uppercase">Rugi</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260112', '12 Jan 2026', 'Wortel Super Bersih', 'Swalayan Indo', '800 Kg', '5.000', '9.000', 'Profit', '+Rp 3.200.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">12 Jan 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Wortel Super Bersih</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-shop text-slate-300 mr-1"></i> Swalayan Indo</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">800 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 4.000.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 5.000)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 7.200.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 9.000)</span></td>
+                                <td class="p-4 font-black text-green-600 text-right">+Rp 3.200.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-green-100 text-green-700 text-[9px] font-black rounded uppercase">Profit</span>
+                                </td>
+                            </tr>
+
+                            <tr class="table-row-hover"
+                                onclick="openLedgerDetail('TRX-20260105', '05 Jan 2026', 'Jeruk Manis Ekspor', 'PT. Buah Global', '1.500 Kg', '8.000', '18.000', 'Profit', '+Rp 15.000.000')">
+                                <td class="p-4 text-slate-500 font-bold text-xs">05 Jan 2026</td>
+                                <td class="p-4">
+                                    <p class="font-black text-slate-800">Jeruk Manis Ekspor</p>
+                                    <p class="text-[10px] text-slate-500 font-bold"><i
+                                            class="fa-solid fa-plane text-slate-300 mr-1"></i> PT. Buah Global</p>
+                                </td>
+                                <td class="p-4 font-bold text-slate-700">1.500 Kg</td>
+                                <td class="p-4 font-bold text-slate-500">Rp 12.000.000 <span
+                                        class="text-[9px] font-normal block">(@Rp 8.000)</span></td>
+                                <td class="p-4 font-black text-slate-800">Rp 27.000.000 <span
+                                        class="text-[9px] font-normal text-slate-500 block">(@Rp 18.000)</span></td>
+                                <td class="p-4 font-black text-emerald-600 text-right">+Rp 15.000.000</td>
+                                <td class="p-4 text-center"><span
+                                        class="px-2.5 py-1 bg-emerald-100 text-emerald-700 text-[9px] font-black rounded uppercase">Profit</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
+                    <button
+                        onclick="simulateAction(this, 'Muat Lebih Banyak Data <i class=\'fa-solid fa-angle-down ml-1\'></i>', 'Data Dimuat')"
+                        class="w-full text-sm font-bold text-slate-500 hover:text-green-600 transition-colors py-2">Muat
+                        Lebih Banyak Data <i class="fa-solid fa-angle-down ml-1"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div
+        class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-100 h-20 flex items-center justify-around px-2 z-50 pb-2">
+
+        <a href="index.html" class="text-slate-400 flex flex-col items-center gap-1 w-16 transition-all">
+            <i class="fa-solid fa-house-chimney text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Home</span>
+        </a>
+
+        <a href="pesanan.html" class="text-slate-400 flex flex-col items-center gap-1 w-16 relative transition-all">
+            <i class="fa-solid fa-bullhorn text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Pesanan</span>
+            <span class="absolute top-0 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+        </a>
+
+        <div class="relative -top-6">
+            <a href="stok.html"
+                class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white border-8 border-[#f8fafc] shadow-xl shadow-green-200 cursor-pointer active:scale-95 transition-all block">
+                <i class="fa-solid fa-plus text-2xl"></i>
+            </a>
+            <span
+                class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-extrabold text-slate-800 uppercase">Jual</span>
+        </div>
+
+        <a href="bursa.html" class="text-slate-400 flex flex-col items-center gap-1 w-16 transition-all">
+            <i class="fa-solid fa-chart-line text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Bursa</span>
+        </a>
+
+        <button onclick="toggleSidebar()" class="text-green-600 flex flex-col items-center gap-1 w-16 transition-all">
+            <div class="w-10 h-10 flex items-center justify-center bg-green-50 rounded-2xl shadow-sm">
+                <i class="fa-solid fa-bars-staggered text-lg"></i>
+            </div>
+            <span class="text-[10px] font-bold tracking-tight">Menu</span>
+        </button>
+
+    </div>
+
+    <div id="modal-overlay" onclick="closeAllModals()"
+        class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300 pointer-events-none">
+    </div>
+
+    <div id="edit-profile-modal"
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white rounded-[2rem] overflow-hidden z-[110] hidden opacity-0 scale-95 transition-all duration-300 pointer-events-none shadow-2xl flex flex-col">
+        <div class="bg-slate-900 p-6 text-white relative text-center shrink-0">
+            <button onclick="closeAllModals()"
+                class="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full text-white flex items-center justify-center hover:bg-white/30"><i
+                    class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-black mb-1">Edit Profil Akun</h3>
+            <p class="text-xs text-slate-400">Perbarui identitas bisnis Anda</p>
+        </div>
+        <div class="p-6 space-y-4 overflow-y-auto bg-slate-50">
+            <div class="flex justify-center mb-2">
+                <div class="relative">
+                    <img src="https://i.pravatar.cc/150?img=11"
+                        class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md">
+                    <div
+                        class="absolute bottom-0 right-0 bg-green-600 w-7 h-7 rounded-full text-white flex items-center justify-center border-2 border-white cursor-pointer shadow-sm">
+                        <i class="fa-solid fa-camera text-[10px]"></i>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="block text-[10px] font-black text-slate-500 mb-1 uppercase tracking-widest">Nama
+                    Lengkap</label>
+                <input type="text" id="input-name" value="Kader Jaelani"
+                    class="w-full p-4 bg-white border border-slate-200 rounded-xl outline-none focus:border-green-500 text-sm font-bold text-slate-800 shadow-sm">
+            </div>
+            <div>
+                <label class="block text-[10px] font-black text-slate-500 mb-1 uppercase tracking-widest">Domisili /
+                    Lokasi</label>
+                <input type="text" id="input-loc" value="Kab. Bandung"
+                    class="w-full p-4 bg-white border border-slate-200 rounded-xl outline-none focus:border-green-500 text-sm font-bold text-slate-800 shadow-sm">
+            </div>
+            <div>
+                <label class="block text-[10px] font-black text-slate-500 mb-1 uppercase tracking-widest">Nomor HP
+                    (WhatsApp)</label>
+                <input type="tel" value="081234567890"
+                    class="w-full p-4 bg-white border border-slate-200 rounded-xl outline-none focus:border-green-500 text-sm font-bold text-slate-800 shadow-sm">
+            </div>
+        </div>
+        <div class="p-6 border-t border-slate-100 bg-white flex gap-3 shrink-0">
+            <button onclick="closeAllModals()"
+                class="w-1/3 py-4 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">Batal</button>
+            <button onclick="saveProfile(this)"
+                class="w-2/3 py-4 bg-green-600 text-white rounded-xl text-sm font-black shadow-lg shadow-green-200 active:scale-95 transition-all uppercase tracking-widest">Simpan
+                Perubahan</button>
+        </div>
+    </div>
+
+    <div id="ledger-detail-modal"
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-lg bg-white rounded-[2rem] overflow-hidden z-[110] hidden opacity-0 scale-95 transition-all duration-300 pointer-events-none shadow-2xl flex flex-col">
+
+        <div id="ld-header" class="p-6 text-white relative shrink-0 bg-green-600">
+            <button onclick="closeAllModals()"
+                class="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full text-white flex items-center justify-center hover:bg-white/40"><i
+                    class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-xl"><i
+                        class="fa-solid fa-file-invoice-dollar"></i></div>
+                <div>
+                    <h3 class="text-xl font-black mb-1">Rincian Ledger</h3>
+                    <p class="text-[10px] font-bold opacity-80" id="ld-trx-id">TRX-XXXX</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 space-y-5 overflow-y-auto bg-slate-50">
+            <div class="flex justify-between items-start border-b border-slate-200 pb-4">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tanggal & Pembeli
+                    </p>
+                    <p class="font-black text-slate-800 text-sm" id="ld-buyer">Nama Pembeli</p>
+                    <p class="text-xs text-slate-500 font-medium" id="ld-date">01 Jan 2026</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                    <span id="ld-badge"
+                        class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-lg uppercase">Profit</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-50">
+                    <span class="text-xs font-bold text-slate-500">Komoditas Terjual</span>
+                    <span class="text-sm font-black text-slate-800" id="ld-item">Nama Item</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-slate-50 p-2 rounded-lg">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase">Volume</p>
+                        <p class="text-xs font-black text-slate-800" id="ld-qty">0 Kg</p>
+                    </div>
+                    <div class="bg-slate-50 p-2 rounded-lg">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase">Modal/Kg</p>
+                        <p class="text-xs font-black text-slate-800" id="ld-buy-price">Rp 0</p>
+                    </div>
+                    <div class="bg-slate-50 p-2 rounded-lg">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase">Jual/Kg</p>
+                        <p class="text-xs font-black text-blue-600" id="ld-sell-price">Rp 0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-bold text-slate-500 px-2">
+                    <span>Total Pengeluaran (HPP)</span>
+                    <span id="ld-total-cost">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-xs font-bold text-slate-500 px-2">
+                    <span>Total Pemasukan (Omzet)</span>
+                    <span id="ld-total-revenue">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-end pt-3 border-t border-slate-200 px-2">
+                    <span class="text-xs font-black text-slate-800 uppercase tracking-widest">Net Margin</span>
+                    <span class="text-xl font-black tracking-tighter" id="ld-margin-total">Rp 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 border-t border-slate-100 bg-white flex gap-3 shrink-0">
+            <button onclick="closeAllModals()"
+                class="w-1/3 py-3.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">Tutup</button>
+            <button
+                onclick="simulateAction(this, 'Unduh Bukti Transaksi', '<i class=\'fa-solid fa-check mr-2\'></i> Terunduh')"
+                class="w-2/3 py-3.5 bg-slate-900 text-white rounded-xl text-sm font-black shadow-lg active:scale-95 transition-all"><i
+                    class="fa-solid fa-file-pdf mr-2"></i> Unduh Bukti</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.replace('-translate-x-full', 'translate-x-0');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.replace('opacity-0', 'opacity-100'), 10);
+            } else {
+                sidebar.classList.replace('translate-x-0', '-translate-x-full');
+                overlay.classList.replace('opacity-100', 'opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // ================= MODAL LOGIC =================
+        function openEditProfile() {
+            const modal = document.getElementById('edit-profile-modal');
+            const overlay = document.getElementById('modal-overlay');
+
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.replace('opacity-0', 'opacity-100');
+                overlay.classList.replace('pointer-events-none', 'pointer-events-auto');
+                modal.classList.replace('opacity-0', 'opacity-100');
+                modal.classList.replace('scale-95', 'scale-100');
+                modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+            }, 10);
+        }
+
+        function saveProfile(btn) {
+            const defaultText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Menyimpan...';
+
+            setTimeout(() => {
+                // Update Name & Location on screen
+                document.getElementById('profile-name-display').innerText = document.getElementById('input-name').value;
+                document.getElementById('profile-loc-display').innerText = document.getElementById('input-loc').value;
+
+                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Tersimpan!';
+                btn.classList.replace('bg-green-600', 'bg-emerald-500');
+
+                setTimeout(() => {
+                    closeAllModals();
+                    setTimeout(() => {
+                        btn.innerHTML = defaultText;
+                        btn.classList.replace('bg-emerald-500', 'bg-green-600');
+                    }, 300);
+                }, 1000);
+            }, 1500);
+        }
+
+        function openLedgerDetail(id, date, item, buyer, qty, buyPrice, sellPrice, status, margin) {
+            // Set Text
+            document.getElementById('ld-trx-id').innerText = id;
+            document.getElementById('ld-date').innerText = date;
+            document.getElementById('ld-item').innerText = item;
+            document.getElementById('ld-buyer').innerText = buyer;
+            document.getElementById('ld-qty').innerText = qty;
+            document.getElementById('ld-buy-price').innerText = "Rp " + buyPrice;
+            document.getElementById('ld-sell-price').innerText = "Rp " + sellPrice;
+            document.getElementById('ld-margin-total').innerText = margin;
+
+            // Hitung Total (karena string Qty formatnya "500 Kg" dan Price "4.500", kita parsing dulu untuk hitung)
+            const q = parseInt(qty.replace(/\D/g, ''));
+            const bp = parseInt(buyPrice.replace(/\D/g, ''));
+            const sp = parseInt(sellPrice.replace(/\D/g, ''));
+
+            document.getElementById('ld-total-cost').innerText = "Rp " + (q * bp).toLocaleString('id-ID');
+            document.getElementById('ld-total-revenue').innerText = "Rp " + (q * sp).toLocaleString('id-ID');
+
+            // Set Style Badge & Header berdasarkan Status
+            const badge = document.getElementById('ld-badge');
+            const header = document.getElementById('ld-header');
+            const marginText = document.getElementById('ld-margin-total');
+
+            badge.innerText = status;
+            // Reset class
+            badge.className = "px-3 py-1 text-[10px] font-black rounded-lg uppercase";
+            header.className = "p-6 text-white relative shrink-0 transition-colors";
+
+            if (status === 'Profit') {
+                badge.classList.add('bg-green-100', 'text-green-700');
+                header.classList.add('bg-green-600');
+                marginText.className = "text-xl font-black tracking-tighter text-green-600";
+            } else if (status === 'Rugi') {
+                badge.classList.add('bg-red-100', 'text-red-700');
+                header.classList.add('bg-red-500');
+                marginText.className = "text-xl font-black tracking-tighter text-red-500";
+            } else {
+                badge.classList.add('bg-slate-200', 'text-slate-700');
+                header.classList.add('bg-slate-700');
+                marginText.className = "text-xl font-black tracking-tighter text-slate-700";
+            }
+
+            // Open Modal
+            const modal = document.getElementById('ledger-detail-modal');
+            const overlay = document.getElementById('modal-overlay');
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.replace('opacity-0', 'opacity-100');
+                overlay.classList.replace('pointer-events-none', 'pointer-events-auto');
+                modal.classList.replace('opacity-0', 'opacity-100');
+                modal.classList.replace('scale-95', 'scale-100');
+                modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+            }, 10);
+        }
+
+        function closeAllModals() {
+            const overlay = document.getElementById('modal-overlay');
+            const modals = [document.getElementById('edit-profile-modal'), document.getElementById('ledger-detail-modal')];
+
+            overlay.classList.replace('opacity-100', 'opacity-0');
+            overlay.classList.replace('pointer-events-auto', 'pointer-events-none');
+
+            modals.forEach(modal => {
+                if (!modal.classList.contains('hidden')) {
+                    modal.classList.replace('opacity-100', 'opacity-0');
+                    modal.classList.replace('scale-100', 'scale-95');
+                    modal.classList.replace('pointer-events-auto', 'pointer-events-none');
+                    setTimeout(() => { modal.classList.add('hidden'); }, 300);
+                }
+            });
+            setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+        }
+
+        // Generic Loader Function
+        function simulateAction(btn, defaultHTML, successHTML) {
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Proses...';
+            setTimeout(() => {
+                btn.innerHTML = successHTML;
+                setTimeout(() => { btn.innerHTML = defaultHTML; }, 2000);
+            }, 1500);
+        }
+
+        // ================= CHART LOGIC =================
+        const ctxProfit = document.getElementById('profitChart').getContext('2d');
+        new Chart(ctxProfit, {
+            type: 'line',
+            data: {
+                labels: ['Okt', 'Nov', 'Des', 'Jan', 'Feb', 'Mar'],
+                datasets: [{
+                    label: 'Net Profit (Juta Rp)',
+                    data: [25, 42, 38, 55, 48, 93.9],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#10b981',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { borderDash: [5, 5], color: '#f1f5f9' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+                }
+            }
+        });
+
+        const ctxPortfolio = document.getElementById('portfolioChart').getContext('2d');
+        new Chart(ctxPortfolio, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bumbu Dapur', 'Sayuran', 'Biji-bijian'],
+                datasets: [{
+                    data: [45, 35, 20],
+                    backgroundColor: ['#10b981', '#3b82f6', '#facc15'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false } } }
+        });
+    </script>
+</body>
+
+</html>
