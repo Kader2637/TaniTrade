@@ -68,7 +68,6 @@
     <div id="sidebar-overlay" onclick="toggleSidebar()"
         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300">
     </div>
-
     <aside id="main-sidebar"
         class="fixed lg:static inset-y-0 left-0 w-72 bg-white border-r border-slate-100 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-20 flex items-center justify-between px-8 border-b border-slate-50">
@@ -79,16 +78,32 @@
 
         <nav class="flex-1 px-6 py-6 space-y-2 overflow-y-auto hide-scrollbar">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Dashboard Utama</p>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 font-bold rounded-2xl"><i
-                    class="fa-solid fa-house-chimney w-5"></i> Dashboard</a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
-                    class="fa-solid fa-chart-line w-5"></i> Bursa Harga</a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
-                    class="fa-solid fa-bullhorn w-5"></i> Permintaan Pasar</a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
-                    class="fa-solid fa-box-open w-5"></i> Stok Saya</a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
-                    class="fa-solid fa-handshake w-5"></i> Negosiasi</a>
+
+            <a href="index.html"
+                class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 font-bold rounded-2xl shadow-sm shadow-green-100/50 transition-all">
+                <i class="fa-solid fa-house-chimney w-5"></i> <span>Dashboard</span>
+            </a>
+
+            <a href="bursa.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+                <i class="fa-solid fa-chart-line w-5"></i> <span>Bursa Harga</span>
+            </a>
+
+            <a href="pesanan.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all relative">
+                <i class="fa-solid fa-bullhorn w-5"></i> <span>Permintaan Pasar</span>
+                <span class="absolute right-4 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+            </a>
+
+            <a href="stok.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+                <i class="fa-solid fa-box-open w-5"></i> <span>Stok Saya</span>
+            </a>
+
+            <a href="nego.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+                <i class="fa-solid fa-handshake w-5"></i> <span>Negosiasi</span>
+            </a>
 
             <div class="pt-8 px-4">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Radar Sekitar</p>
@@ -694,36 +709,38 @@
     </main>
     <div
         class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-100 h-20 flex items-center justify-around px-2 z-50 pb-2">
-        <button class="text-green-600 flex flex-col items-center gap-1 w-16">
+
+        <a href="index.html" class="text-green-600 flex flex-col items-center gap-1 w-16">
             <div class="w-10 h-10 flex items-center justify-center bg-green-50 rounded-2xl">
                 <i class="fa-solid fa-house-chimney text-lg"></i>
             </div>
             <span class="text-[10px] font-bold tracking-tight">Home</span>
-        </button>
+        </a>
 
-        <button class="text-slate-400 flex flex-col items-center gap-1 w-16 relative">
+        <a href="pesanan.html" class="text-slate-400 flex flex-col items-center gap-1 w-16 relative">
             <i class="fa-solid fa-bullhorn text-lg"></i>
             <span class="text-[10px] font-bold tracking-tight">Pesanan</span>
-            <span class="absolute top-0 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+            <span
+                class="absolute top-0 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+        </a>
 
         <div class="relative -top-6">
-            <div
-                class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white border-8 border-[#f8fafc] shadow-xl shadow-green-200 cursor-pointer active:scale-90 transition-transform">
+            <a href="stok.html"
+                class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white border-8 border-[#f8fafc] shadow-xl shadow-green-200 cursor-pointer active:scale-90 transition-transform block">
                 <i class="fa-solid fa-plus text-2xl"></i>
-            </div>
+            </a>
             <span
                 class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-extrabold text-slate-800 uppercase">Jual</span>
         </div>
 
-        <button class="text-slate-400 flex flex-col items-center gap-1 w-16">
-            <i class="fa-solid fa-wallet text-lg"></i>
-            <span class="text-[10px] font-bold tracking-tight">Saldo</span>
-        </button>
+        <a href="bursa.html" class="text-slate-400 flex flex-col items-center gap-1 w-16">
+            <i class="fa-solid fa-chart-line text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Bursa</span>
+        </a>
 
-        <button class="text-slate-400 flex flex-col items-center gap-1 w-16">
-            <i class="fa-solid fa-circle-user text-lg"></i>
-            <span class="text-[10px] font-bold tracking-tight">Profil</span>
+        <button onclick="toggleSidebar()" class="text-slate-400 flex flex-col items-center gap-1 w-16">
+            <i class="fa-solid fa-bars-staggered text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Menu</span>
         </button>
     </div>
     <div id="modal-overlay"

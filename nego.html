@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Negosiasi - TaniTrade Digital</title>
+    <meta name="description" content="Ruang negosiasi harga antara petani dan pembeli di TaniTrade.">
+    
+    <link rel="icon" type="image/png" href="assets/logoseo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-900 overflow-hidden">
+
+    <div class="flex h-[100dvh] w-full relative">
+        
+        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+
+       <aside id="main-sidebar" class="fixed lg:static inset-y-0 left-0 w-72 bg-white border-r border-slate-100 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shrink-0 h-full">
+    <div class="h-20 flex items-center justify-between px-8 border-b border-slate-50 shrink-0">
+        <img src="assets/logo.png" alt="Logo" class="h-9 w-auto object-contain">
+        <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-red-500">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+    </div>
+
+    <nav class="flex-1 px-6 py-6 space-y-2 overflow-y-auto hide-scrollbar">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Menu Utama</p>
+        
+        <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+            <i class="fa-solid fa-house-chimney w-5"></i> <span>Dashboard</span>
+        </a>
+
+        <a href="bursa.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+            <i class="fa-solid fa-chart-line w-5"></i> <span>Bursa Harga</span>
+        </a>
+
+        <a href="pesanan.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all relative">
+            <i class="fa-solid fa-bullhorn w-5"></i> <span>Permintaan Pasar</span>
+        </a>
+
+        <a href="stok.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+            <i class="fa-solid fa-box-open w-5"></i> <span>Stok Saya</span>
+        </a>
+
+        <a href="nego.html" class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 font-bold rounded-2xl shadow-sm shadow-green-100/50 relative transition-all">
+            <i class="fa-solid fa-handshake w-5"></i> <span>Negosiasi</span>
+        </a>
+
+        <div class="pt-8 px-4">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Radar Sekitar</p>
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                    <span class="text-xs font-bold text-slate-700">12 Petani Aktif</span>
+                </div>
+                <p class="text-[10px] text-slate-500 leading-relaxed">Siap kirim hasil panen dalam radius 5km hari ini.</p>
+            </div>
+        </div>
+    </nav>
+</aside>
+
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
+            
+            <header
+            class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 z-20 shrink-0 sticky top-0">
+            <button onclick="toggleSidebar()"
+                class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 active:scale-95 transition-all">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+
+            <div class="lg:hidden absolute left-1/2 -translate-x-1/2">
+                <img src="assets/logo.png" alt="TaniTrade" class="h-9 w-auto object-contain">
+            </div>
+
+            <div
+                class="hidden lg:flex items-center gap-4 bg-slate-100 px-4 py-2 rounded-full w-96 focus-within:ring-2 focus-within:ring-green-500 transition-all">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                <input type="text" placeholder="Cari komoditas..."
+                    class="bg-transparent border-none outline-none text-sm w-full">
+            </div>
+
+            <div class="flex items-center gap-2 lg:gap-5">
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 relative">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-slate-200 mx-1 hidden lg:block"></div>
+                <img src="https://avatars.githubusercontent.com/u/130645424?v=4" alt="Profile"
+                    class="w-10 h-10 rounded-xl object-cover border-2 border-white shadow-sm">
+            </div>
+        </header>
+
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 pb-32 bg-slate-50/50">
+                
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl lg:text-3xl font-black text-slate-800 tracking-tight mb-1">Ruang <span class="text-green-600">Negosiasi</span></h1>
+                        <p class="text-slate-500 text-sm font-medium">Tawar-menawar harga langsung dengan calon pembeli Anda.</p>
+                    </div>
+                    
+                    <div class="flex gap-2 overflow-x-auto pb-2 hide-scrollbar w-full md:w-auto">
+                        <button class="filter-btn active px-5 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-md whitespace-nowrap transition-all" data-filter="semua">Semua Chat</button>
+                        <button class="filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all relative" data-filter="aktif">Butuh Respon <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span></button>
+                        <button class="filter-btn px-5 py-2 bg-white text-slate-600 border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all" data-filter="sepakat">Sepakat</button>
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="nego-list">
+                    
+                    <div class="nego-card bg-white p-4 lg:p-6 rounded-3xl border border-slate-100 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4 cursor-pointer hover:border-green-300 transition-all group relative" data-category="aktif" onclick="openChatModal('PT. Saus Nusantara', 'Tomat Segar Grade A (500 Kg)')">
+                        <div class="absolute top-4 right-4 w-3 h-3 bg-red-500 rounded-full shadow-sm shadow-red-200 animate-pulse"></div>
+                        <div class="flex items-center gap-4 w-full md:w-auto">
+                            <div class="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-industry"></i></div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="font-black text-slate-800 text-base">PT. Saus Nusantara</h3>
+                                </div>
+                                <p class="text-xs text-slate-500 font-bold mb-1"><i class="fa-solid fa-apple-whole text-rose-500 mr-1"></i> Tomat Segar (500 Kg)</p>
+                                <p class="text-xs text-slate-800 font-medium truncate max-w-[200px] sm:max-w-md">"Gimana kalau Rp 8.150/kg, saya ambil semua besok pagi."</p>
+                            </div>
+                        </div>
+                        <div class="flex w-full md:w-auto justify-between md:justify-end items-center md:items-end flex-row md:flex-col gap-4 border-t md:border-none border-slate-50 pt-4 md:pt-0 mt-2 md:mt-0">
+                            <div class="text-left md:text-right">
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Tawaran Terakhir</p>
+                                <p class="text-lg font-black text-green-600 tracking-tighter">Rp 8.150 <span class="text-xs font-bold text-slate-400">/kg</span></p>
+                            </div>
+                            <button class="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold group-hover:bg-green-600 transition-colors shadow-md whitespace-nowrap">Buka Ruang Nego</button>
+                        </div>
+                    </div>
+
+                    <div class="nego-card bg-emerald-50/50 p-4 lg:p-6 rounded-3xl border border-emerald-100 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-category="sepakat">
+                        <div class="flex items-center gap-4 w-full md:w-auto">
+                            <div class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-lg shadow-emerald-200"><i class="fa-solid fa-handshake"></i></div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="font-bold text-slate-800 text-base">Pabrik Keripik Frito</h3>
+                                    <span class="px-2 py-0.5 bg-emerald-500 text-white rounded text-[9px] font-black uppercase tracking-widest hidden md:inline-block"><i class="fa-solid fa-check mr-1"></i> DEAL</span>
+                                </div>
+                                <p class="text-xs text-slate-500 font-bold mb-1"><i class="fa-solid fa-leaf text-emerald-500 mr-1"></i> Kentang Dieng (5 Ton)</p>
+                                <p class="text-xs text-emerald-600 font-bold">Sistem: Transaksi Selesai. Invoice telah diterbitkan.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex w-full md:w-auto justify-between md:justify-end items-center md:items-end flex-row md:flex-col gap-4 border-t md:border-none border-emerald-100 pt-4 md:pt-0 mt-2 md:mt-0">
+                            <div class="text-left md:text-right">
+                                <p class="text-[10px] text-emerald-600/70 font-bold uppercase tracking-widest mb-1">Harga Deal</p>
+                                <p class="text-lg font-black text-emerald-700 tracking-tighter">Rp 16.500 <span class="text-xs font-bold">/kg</span></p>
+                            </div>
+                            <button onclick="openInvoiceModal('INV-20260307-001', 'Pabrik Keripik Frito', 'Kentang Dieng Grade A', '5000', '16500')" class="px-5 py-2.5 bg-white text-emerald-600 border border-emerald-200 rounded-xl text-xs font-bold whitespace-nowrap shadow-sm hover:bg-emerald-50 transition-colors"><i class="fa-solid fa-receipt mr-1"></i> Lihat Invoice</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-100 h-16 flex items-center justify-around px-4 z-[60] pb-2">
+            <a href="index.html" class="text-slate-400 flex flex-col items-center gap-1 w-12">
+                <i class="fa-solid fa-house-chimney text-lg"></i><span class="text-[9px] font-bold">Home</span>
+            </a>
+            <a href="pesanan.html" class="text-slate-400 flex flex-col items-center gap-1 w-12">
+                <i class="fa-solid fa-bullhorn text-lg"></i><span class="text-[9px] font-bold">Pesanan</span>
+            </a>
+            <div class="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center text-white -mt-10 border-4 border-[#f8fafc] shadow-xl shadow-green-200 cursor-pointer active:scale-90 transition-transform">
+                <i class="fa-solid fa-plus text-xl"></i>
+            </div>
+            <a href="stok.html" class="text-slate-400 flex flex-col items-center gap-1 w-12">
+                <i class="fa-solid fa-box-open text-lg"></i><span class="text-[9px] font-bold">Stok</span>
+            </a>
+            <a href="nego.html" class="text-green-600 flex flex-col items-center gap-1 w-12 relative">
+                <i class="fa-solid fa-handshake text-lg"></i><span class="text-[9px] font-bold">Nego</span>
+            </a>
+        </div>
+    </div>
+
+    <div id="modal-overlay" onclick="closeAllModals()" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+    
+    <div id="chat-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl bg-white rounded-[2rem] overflow-hidden z-[110] hidden opacity-0 scale-95 transition-all duration-300 pointer-events-none shadow-2xl flex flex-col h-[85vh] lg:h-[80vh]">
+        <div class="bg-white border-b border-slate-100 p-4 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-building"></i></div>
+                <div>
+                    <h3 id="chat-company-name" class="font-black text-slate-800 leading-none mb-1">Nama Pabrik</h3>
+                    <p id="chat-item-name" class="text-[10px] text-green-600 font-bold uppercase tracking-widest bg-green-50 px-2 py-0.5 rounded-md inline-block">Item Komoditas</p>
+                </div>
+            </div>
+            <button onclick="closeAllModals()" class="w-8 h-8 bg-slate-50 text-slate-500 hover:bg-slate-200 rounded-full flex justify-center items-center"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-4 bg-slate-50 space-y-6" id="chat-box">
+            <div class="flex justify-center"><span class="px-3 py-1 bg-slate-200/50 text-slate-400 text-[10px] font-bold rounded-full uppercase tracking-widest">Hari Ini</span></div>
+            <div class="flex gap-3 max-w-[85%]"><div class="w-8 h-8 rounded-full bg-slate-200 flex-shrink-0"></div><div><div class="bg-white p-3 rounded-2xl rounded-tl-sm card-shadow border border-slate-100"><p class="text-sm font-medium text-slate-700">Halo pak, saya butuh stok Tomat Segar Grade A. Boleh dilepas harga Rp 8.000/kg?</p></div><p class="text-[9px] font-bold text-slate-400 mt-1 ml-1">09:15 WIB</p></div></div>
+            <div class="flex gap-3 max-w-[85%] self-end ml-auto flex-row-reverse"><div class="w-8 h-8 rounded-full bg-green-100 flex-shrink-0 overflow-hidden"><img src="https://i.pravatar.cc/150?img=11" class="w-full h-full object-cover"></div><div><div class="bg-green-600 text-white p-3 rounded-2xl rounded-tr-sm shadow-md shadow-green-200"><p class="text-sm font-medium">Waduh 8.000 belum masuk modal pak. Rp 8.300/kg saya kirim hari ini juga.</p></div><p class="text-[9px] font-bold text-slate-400 mt-1 mr-1 text-right">09:20 WIB <i class="fa-solid fa-check-double text-blue-400 ml-1"></i></p></div></div>
+            
+            <div class="flex gap-3 w-full">
+                <div class="w-8 h-8 rounded-full bg-slate-200 flex-shrink-0 hidden md:block"></div>
+                <div class="w-full">
+                    <div class="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-2xl border border-orange-200 card-shadow w-full">
+                        <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-tag text-orange-500"></i><span class="text-[10px] font-black text-orange-600 uppercase tracking-widest">Tawaran Pembeli</span></div>
+                        <p class="text-sm font-medium text-slate-700 mb-3">"Gimana kalau jalan tengah, Rp 8.150/kg, saya ambil semua besok pagi."</p>
+                        <div class="bg-white p-3 rounded-xl border border-orange-100 flex justify-between items-center">
+                            <div><p class="text-[9px] text-slate-400 font-bold uppercase mb-1">Total Transaksi</p><p class="text-lg font-black text-slate-800 tracking-tighter">Rp 4.075.000</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="chat-bottom"></div>
+        </div>
+        
+        <div class="bg-white border-t border-slate-100 p-4 shrink-0 flex gap-2 items-center">
+            <button onclick="dealAccepted(this)" class="w-1/2 py-3.5 bg-green-600 text-white rounded-xl text-sm font-black shadow-lg shadow-green-200 active:scale-95 transition-all uppercase tracking-widest"><i class="fa-solid fa-handshake"></i> Deal</button>
+            <div class="flex w-1/2 gap-2">
+                <input type="text" placeholder="Tawar balik..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 outline-none text-sm">
+                <button class="w-12 h-12 bg-slate-900 text-white rounded-xl flex items-center justify-center shrink-0"><i class="fa-regular fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="invoice-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-lg bg-white rounded-[2rem] overflow-hidden z-[110] hidden opacity-0 scale-95 transition-all duration-300 pointer-events-none shadow-2xl flex flex-col max-h-[90vh]">
+        
+        <div class="bg-slate-900 p-6 lg:p-8 text-white relative shrink-0">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            
+            <div class="relative z-10 flex justify-between items-start">
+                <div>
+                    <img src="assets/logo.png" alt="Logo" class="h-6 w-auto object-contain mb-4 filter brightness-0 invert">
+                    <span class="px-2 py-1 bg-white/10 border border-white/20 rounded text-[9px] font-black uppercase tracking-widest mb-1 inline-block">Faktur Resmi</span>
+                    <h3 class="text-3xl font-black leading-none tracking-tight">INVOICE</h3>
+                    <p class="text-xs text-slate-400 font-bold mt-1" id="inv-number">INV-XXXX</p>
+                </div>
+                <div class="text-right">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full border-4 border-emerald-500 text-emerald-500 font-black text-[10px] transform rotate-12 bg-emerald-500/10 backdrop-blur-sm">
+                        LUNAS
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-6 lg:p-8 overflow-y-auto hide-scrollbar bg-slate-50/50 space-y-6">
+            
+            <div class="flex justify-between gap-4 border-b border-slate-200 pb-5">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Ditagihkan Kepada:</p>
+                    <p class="text-base font-black text-slate-800" id="inv-buyer">Nama Pembeli</p>
+                    <p class="text-xs text-slate-500 font-medium">Pembayaran via Bank Transfer</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tanggal Bayar:</p>
+                    <p class="text-sm font-black text-slate-800">07 Mar 2026</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-2 mb-3">
+                    <span>Deskripsi Barang</span>
+                    <span>Total Harga</span>
+                </div>
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <p class="text-sm font-black text-slate-800" id="inv-item">Nama Item</p>
+                        <p class="text-xs font-bold text-slate-500 mt-0.5"><span id="inv-qty">0</span> Kg &nbsp;x&nbsp; Rp <span id="inv-price">0</span></p>
+                    </div>
+                    <p class="text-sm font-black text-slate-800" id="inv-item-total">Rp 0</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                <div class="flex justify-between text-xs font-bold text-slate-500">
+                    <span>Subtotal</span>
+                    <span id="inv-subtotal">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-xs font-bold text-slate-500">
+                    <span>Biaya Platform (Gratis)</span>
+                    <span class="text-green-600">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-end pt-3 border-t border-slate-200 border-dashed">
+                    <span class="text-sm font-black text-slate-800">Total Terima Bersih</span>
+                    <span class="text-2xl font-black text-emerald-600 tracking-tighter" id="inv-grand-total">Rp 0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-6 border-t border-slate-100 bg-white shrink-0 flex gap-3">
+            <button onclick="closeAllModals()" class="w-1/3 py-3.5 bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 rounded-xl transition-colors text-sm">Tutup</button>
+            <button onclick="simulateDownload(this)" class="w-2/3 py-3.5 bg-blue-600 text-white rounded-xl text-sm font-black shadow-lg shadow-blue-200 active:scale-95 transition-all flex justify-center items-center gap-2"><i class="fa-solid fa-cloud-arrow-down"></i> Unduh PDF</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isOpen = sidebar.classList.contains('translate-x-0');
+
+            if (isOpen) {
+                sidebar.classList.replace('translate-x-0', '-translate-x-full');
+                overlay.classList.replace('opacity-100', 'opacity-0');
+                setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+            } else {
+                overlay.classList.remove('hidden');
+                sidebar.classList.replace('-translate-x-full', 'translate-x-0');
+                setTimeout(() => { overlay.classList.replace('opacity-0', 'opacity-100'); }, 10);
+            }
+        }
+
+        // LOGIKA FILTER LIST Nego
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const negoCards = document.querySelectorAll('.nego-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-slate-900', 'text-white', 'shadow-md', 'active');
+                        b.classList.add('bg-white', 'text-slate-600');
+                    });
+                    btn.classList.remove('bg-white', 'text-slate-600');
+                    btn.classList.add('bg-slate-900', 'text-white', 'shadow-md', 'active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+                    negoCards.forEach(card => {
+                        if (filterValue === 'semua' || card.getAttribute('data-category') === filterValue) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+
+        // 1. OPEN CHAT MODAL
+        function openChatModal(companyName, itemName) {
+            const modal = document.getElementById('chat-modal');
+            const overlay = document.getElementById('modal-overlay');
+            
+            document.getElementById('chat-company-name').innerText = companyName;
+            document.getElementById('chat-item-name').innerText = itemName;
+
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                overlay.classList.replace('opacity-0', 'opacity-100');
+                overlay.classList.replace('pointer-events-none', 'pointer-events-auto');
+                modal.classList.replace('opacity-0', 'opacity-100');
+                modal.classList.replace('scale-95', 'scale-100');
+                modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+                document.getElementById('chat-bottom').scrollIntoView({ behavior: 'smooth' });
+            }, 10);
+        }
+
+        // 2. OPEN INVOICE MODAL (LOGIKA KALKULASI TOTAL)
+        function openInvoiceModal(invNum, buyer, item, qty, price) {
+            const q = parseInt(qty);
+            const p = parseInt(price);
+            const total = q * p;
+
+            // Memasukkan data ke dalam elemen HTML Invoice
+            document.getElementById('inv-number').innerText = invNum;
+            document.getElementById('inv-buyer').innerText = buyer;
+            document.getElementById('inv-item').innerText = item;
+            document.getElementById('inv-qty').innerText = q.toLocaleString('id-ID');
+            document.getElementById('inv-price').innerText = p.toLocaleString('id-ID');
+            
+            const totalStr = 'Rp ' + total.toLocaleString('id-ID');
+            document.getElementById('inv-item-total').innerText = totalStr;
+            document.getElementById('inv-subtotal').innerText = totalStr;
+            document.getElementById('inv-grand-total').innerText = totalStr;
+
+            const modal = document.getElementById('invoice-modal');
+            const overlay = document.getElementById('modal-overlay');
+            
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                overlay.classList.replace('opacity-0', 'opacity-100');
+                overlay.classList.replace('pointer-events-none', 'pointer-events-auto');
+                modal.classList.replace('opacity-0', 'opacity-100');
+                modal.classList.replace('scale-95', 'scale-100');
+                modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+            }, 10);
+        }
+
+        function closeAllModals() {
+            const overlay = document.getElementById('modal-overlay');
+            const chatModal = document.getElementById('chat-modal');
+            const invModal = document.getElementById('invoice-modal');
+            
+            overlay.classList.replace('opacity-100', 'opacity-0');
+            overlay.classList.replace('pointer-events-auto', 'pointer-events-none');
+            
+            [chatModal, invModal].forEach(modal => {
+                if(!modal.classList.contains('hidden')) {
+                    modal.classList.replace('opacity-100', 'opacity-0');
+                    modal.classList.replace('scale-100', 'scale-95');
+                    modal.classList.replace('pointer-events-auto', 'pointer-events-none');
+                    setTimeout(() => { modal.classList.add('hidden'); }, 300);
+                }
+            });
+        }
+
+        // SIMULASI TOMBOL DEAL DI CHAT
+        function dealAccepted(btn) {
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Memproses Kontrak...';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fa-solid fa-check-double mr-2"></i> DEAL BERHASIL!';
+                btn.classList.replace('bg-green-600', 'bg-emerald-500');
+                
+                const chatBox = document.getElementById('chat-box');
+                const systemBubble = document.createElement('div');
+                systemBubble.className = "flex justify-center w-full mt-4";
+                systemBubble.innerHTML = `<span class="px-4 py-2 bg-emerald-100 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-xl shadow-sm text-center"><i class="fa-solid fa-lock mr-1"></i> Kesepakatan harga terkunci. Menunggu pembayaran dari pembeli.</span>`;
+                
+                chatBox.insertBefore(systemBubble, document.getElementById('chat-bottom'));
+                document.getElementById('chat-bottom').scrollIntoView({ behavior: 'smooth' });
+
+                setTimeout(() => {
+                    closeAllModals();
+                    // Reset text setelah tertutup
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fa-solid fa-handshake mr-2"></i> Deal';
+                        btn.classList.replace('bg-emerald-500', 'bg-green-600');
+                    }, 300);
+                }, 2500);
+            }, 1500);
+        }
+
+        // SIMULASI UNDUH PDF INVOICE
+        function simulateDownload(btn) {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Membuat PDF...';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Tersimpan ke HP Anda';
+                btn.classList.replace('bg-blue-600', 'bg-emerald-500');
+                btn.classList.replace('shadow-blue-200', 'shadow-emerald-200');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-emerald-500', 'bg-blue-600');
+                    btn.classList.replace('shadow-emerald-200', 'shadow-blue-200');
+                }, 2000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

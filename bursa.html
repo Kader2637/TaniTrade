@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bursa Harga - TaniTrade Digital</title>
+    <meta name="description" content="Pantau harga bursa komoditas tani nasional secara real-time di TaniTrade.">
+    <meta name="keywords"
+        content="tani trade, bursa tani, harga komoditas, jual hasil panen, pertanian digital, harga cabai hari ini, bursa pertanian indonesia">
+    <meta name="author" content="TaniTrade Team">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tanitrade.com/">
+    <meta property="og:title" content="Bursa Harga - TaniTrade Digital">
+    <meta property="og:description"
+        content="Pantau harga bursa komoditas nasional dan temukan pembeli terdekat untuk hasil tani Anda.">
+    <meta property="og:image" content="assets/banner.png">
+
+    <link rel="icon" type="image/png" href="assets/logoseo.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="bg-[#f8fafc] text-slate-900 overflow-hidden">
+
+    <div class="flex h-[100dvh] w-full relative">
+
+        <div id="sidebar-overlay" onclick="toggleSidebar()"
+            class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300 lg:hidden">
+        </div>
+
+        <aside id="main-sidebar"
+            class="fixed lg:static inset-y-0 left-0 w-72 bg-white border-r border-slate-100 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shrink-0 h-full">
+            <div class="h-20 flex items-center justify-between px-8 border-b border-slate-50 shrink-0">
+                <img src="assets/logo.png" alt="Logo" class="h-9 w-auto object-contain">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-red-500">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <nav class="flex-1 px-6 py-6 space-y-2 overflow-y-auto hide-scrollbar">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Menu Utama</p>
+
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+                    <i class="fa-solid fa-house-chimney w-5"></i> <span>Dashboard</span>
+                </a>
+
+                <a href="bursa.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 font-bold rounded-2xl shadow-sm shadow-green-100/50">
+                    <i class="fa-solid fa-chart-line w-5"></i> <span>Bursa Harga</span>
+                </a>
+
+                <a href="pesanan.html"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all relative">
+                    <i class="fa-solid fa-bullhorn w-5"></i> <span>Permintaan Pasar</span>
+                    <span class="absolute right-4 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                </a>
+
+                <a href="stok.html"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+                    <i class="fa-solid fa-box-open w-5"></i> <span>Stok Saya</span>
+                </a>
+
+                <a href="nego.html"
+                    class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all">
+                    <i class="fa-solid fa-handshake w-5"></i> <span>Negosiasi</span>
+                </a>
+
+                <div class="pt-8 px-4">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Radar Sekitar</p>
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                            <span class="text-xs font-bold text-slate-700">12 Petani Aktif</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">Siap kirim hasil panen dalam radius 5km
+                            hari ini.</p>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
+
+            <header
+            class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 z-20 shrink-0 sticky top-0">
+            <button onclick="toggleSidebar()"
+                class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 active:scale-95 transition-all">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+
+            <div class="lg:hidden absolute left-1/2 -translate-x-1/2">
+                <img src="assets/logo.png" alt="TaniTrade" class="h-9 w-auto object-contain">
+            </div>
+
+            <div
+                class="hidden lg:flex items-center gap-4 bg-slate-100 px-4 py-2 rounded-full w-96 focus-within:ring-2 focus-within:ring-green-500 transition-all">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                <input type="text" placeholder="Cari komoditas..."
+                    class="bg-transparent border-none outline-none text-sm w-full">
+            </div>
+
+            <div class="flex items-center gap-2 lg:gap-5">
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 relative">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-slate-200 mx-1 hidden lg:block"></div>
+                <img src="https://avatars.githubusercontent.com/u/130645424?v=4" alt="Profile"
+                    class="w-10 h-10 rounded-xl object-cover border-2 border-white shadow-sm">
+            </div>
+        </header>
+
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-8 pb-32">
+
+                <div
+                    class="rounded-[1.5rem] p-6 lg:p-8 text-white relative overflow-hidden shadow-xl shadow-green-100/30 min-h-[180px] lg:min-h-[220px] flex items-center bg-white border border-slate-100 shrink-0">
+                    <div class="absolute inset-0 z-0">
+                        <img src="assets/banner.png" alt="Hero Banner"
+                            class="w-full h-full object-cover object-center lg:object-right transition-transform duration-1000">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent lg:from-white/90">
+                        </div>
+                    </div>
+                    <div class="relative z-10 max-w-lg text-slate-800">
+                        <div
+                            class="inline-flex items-center gap-2 bg-green-600 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest mb-3 shadow-md text-white">
+                            <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span> Data Real-time
+                        </div>
+                        <h1 class="text-2xl lg:text-4xl font-black mb-2 leading-tight">Bursa <span
+                                class="text-green-600">Komoditas</span></h1>
+                        <p class="text-slate-500 text-xs lg:text-sm font-medium max-w-xs">Pantau pergerakan harga
+                            komoditas pertanian nasional dan ambil keputusan jual beli terbaik Anda hari ini.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 shrink-0">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl lg:text-2xl font-bold text-slate-800 tracking-tight">Harga Pasaran</h2>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Diperbarui: 7 Maret 2026,
+                                09:30 WIB</p>
+                        </div>
+
+                        <div class="flex gap-2 overflow-x-auto pb-2 hide-scrollbar w-full md:w-auto"
+                            id="filter-container">
+                            <button
+                                class="filter-btn active px-5 py-2 bg-green-600 text-white rounded-xl text-xs font-bold shadow-md shadow-green-100 whitespace-nowrap transition-all"
+                                data-filter="semua">Semua</button>
+                            <button
+                                class="filter-btn px-5 py-2 bg-white text-slate-500 border border-slate-100 rounded-xl text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all"
+                                data-filter="sayuran">Sayuran</button>
+                            <button
+                                class="filter-btn px-5 py-2 bg-white text-slate-500 border border-slate-100 rounded-xl text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all"
+                                data-filter="bumbu">Bumbu</button>
+                            <button
+                                class="filter-btn px-5 py-2 bg-white text-slate-500 border border-slate-100 rounded-xl text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all"
+                                data-filter="biji">Biji-bijian</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-6" id="bursa-grid">
+
+                        <div class="bursa-card bg-white rounded-3xl p-6 card-shadow border border-slate-50 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-red-100 group"
+                            data-category="sayuran bumbu">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-xl shadow-inner group-hover:bg-red-500 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-pepper-hot"></i></div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-sm">Cabai Merah</h3>
+                                        <p class="text-[10px] text-red-500 font-bold uppercase tracking-widest">+2.4% <i
+                                                class="fa-solid fa-arrow-up"></i></p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="px-2 py-1 bg-slate-100 text-slate-500 text-[9px] font-black rounded-lg uppercase">Grade
+                                    A</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-50">
+                                <div>
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Harga Bursa</p>
+                                    <p class="text-lg font-black text-slate-800 tracking-tighter">Rp 36.500</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Konsumen</p>
+                                    <p class="text-lg font-black text-red-600 tracking-tighter">Rp 42.000</p>
+                                </div>
+                            </div>
+                            <button onclick="openDetailModal('Cabai Merah', 36500, '+2.4%', 'naik')"
+                                class="w-full py-3 bg-slate-50 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all border border-slate-100 hover:border-slate-300">Lihat
+                                Detail Tren</button>
+                        </div>
+
+                        <div class="bursa-card bg-white rounded-3xl p-6 card-shadow border border-slate-50 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-purple-100 group"
+                            data-category="bumbu">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl shadow-inner group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-seedling"></i></div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-sm">Bawang Merah</h3>
+                                        <p class="text-[10px] text-green-600 font-bold uppercase tracking-widest">-1.1%
+                                            <i class="fa-solid fa-arrow-down"></i></p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="px-2 py-1 bg-slate-100 text-slate-500 text-[9px] font-black rounded-lg uppercase">Brebes</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-50">
+                                <div>
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Harga Bursa</p>
+                                    <p class="text-lg font-black text-slate-800 tracking-tighter">Rp 28.000</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Konsumen</p>
+                                    <p class="text-lg font-black text-purple-600 tracking-tighter">Rp 34.500</p>
+                                </div>
+                            </div>
+                            <button onclick="openDetailModal('Bawang Merah', 28000, '-1.1%', 'turun')"
+                                class="w-full py-3 bg-slate-50 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all border border-slate-100 hover:border-slate-300">Lihat
+                                Detail Tren</button>
+                        </div>
+
+                        <div class="bursa-card bg-white rounded-3xl p-6 card-shadow border border-slate-50 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-blue-100 group"
+                            data-category="biji">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-xl shadow-inner group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-bowl-rice"></i></div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-sm">Beras Premium</h3>
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Stabil
+                                            <i class="fa-solid fa-minus"></i></p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="px-2 py-1 bg-slate-100 text-slate-500 text-[9px] font-black rounded-lg uppercase">Cianjur</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-50">
+                                <div>
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Harga Bursa</p>
+                                    <p class="text-lg font-black text-slate-800 tracking-tighter">Rp 15.200</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Konsumen</p>
+                                    <p class="text-lg font-black text-blue-600 tracking-tighter">Rp 17.500</p>
+                                </div>
+                            </div>
+                            <button onclick="openDetailModal('Beras Premium', 15200, '0.0%', 'stabil')"
+                                class="w-full py-3 bg-slate-50 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all border border-slate-100 hover:border-slate-300">Lihat
+                                Detail Tren</button>
+                        </div>
+
+                        <div class="bursa-card bg-white rounded-3xl p-6 card-shadow border border-slate-50 flex flex-col gap-5 transition-all hover:-translate-y-1 hover:border-rose-100 group"
+                            data-category="sayuran">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center text-xl shadow-inner group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-apple-whole"></i></div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-sm">Tomat Rose</h3>
+                                        <p class="text-[10px] text-red-500 font-bold uppercase tracking-widest">+5.2% <i
+                                                class="fa-solid fa-arrow-up"></i></p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="px-2 py-1 bg-slate-100 text-slate-500 text-[9px] font-black rounded-lg uppercase">Super</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-50">
+                                <div>
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Harga Bursa</p>
+                                    <p class="text-lg font-black text-slate-800 tracking-tighter">Rp 8.500</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[9px] text-slate-400 uppercase font-black mb-1">Konsumen</p>
+                                    <p class="text-lg font-black text-rose-600 tracking-tighter">Rp 12.000</p>
+                                </div>
+                            </div>
+                            <button onclick="openDetailModal('Tomat Rose', 8500, '+5.2%', 'naik')"
+                                class="w-full py-3 bg-slate-50 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-100 transition-all border border-slate-100 hover:border-slate-300">Lihat
+                                Detail Tren</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-100 h-20 flex items-center justify-around px-2 z-50 pb-2">
+
+        <a href="index.html" class="text-slate-400 flex flex-col items-center gap-1 w-16 transition-all">
+            <i class="fa-solid fa-house-chimney text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Home</span>
+        </a>
+
+        <a href="pesanan.html" class="text-slate-400 flex flex-col items-center gap-1 w-16 relative transition-all">
+            <i class="fa-solid fa-bullhorn text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Pesanan</span>
+            <span class="absolute top-0 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+        </a>
+
+        <div class="relative -top-6">
+            <a href="stok.html"
+                class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white border-8 border-[#f8fafc] shadow-xl shadow-green-200 cursor-pointer active:scale-90 transition-transform block">
+                <i class="fa-solid fa-plus text-2xl"></i>
+            </a>
+            <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-extrabold text-slate-800 uppercase">Jual</span>
+        </div>
+
+        <a href="bursa.html" class="text-green-600 flex flex-col items-center gap-1 w-16 transition-all">
+            <div class="w-10 h-10 flex items-center justify-center bg-green-50 rounded-2xl shadow-sm">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+            </div>
+            <span class="text-[10px] font-bold tracking-tight">Bursa</span>
+        </a>
+
+        <button onclick="toggleSidebar()" class="text-slate-400 flex flex-col items-center gap-1 w-16">
+            <i class="fa-solid fa-bars-staggered text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Menu</span>
+        </button>
+    </div>
+    </div>
+
+    <div id="modal-overlay" onclick="closeAllModals()"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300 pointer-events-none">
+    </div>
+
+    <div id="detail-modal"
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-lg bg-white rounded-[2.5rem] overflow-hidden z-[110] hidden opacity-0 scale-95 transition-all duration-300 pointer-events-none shadow-2xl">
+        <div class="p-8 pb-6 border-b border-slate-100 flex justify-between items-start">
+            <div>
+                <p id="modal-item-name" class="text-2xl font-black text-slate-800 mb-1">Nama Item</p>
+                <div class="flex items-center gap-2">
+                    <p id="modal-item-price" class="text-xl font-bold text-green-600">Rp 0</p>
+                    <span id="modal-item-badge"
+                        class="px-2 py-0.5 rounded text-[10px] font-bold text-white bg-green-500">0%</span>
+                </div>
+            </div>
+            <button onclick="closeAllModals()"
+                class="w-8 h-8 flex justify-center items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="p-6">
+            <div class="w-full h-48 mb-6">
+                <canvas id="bursaChart"></canvas>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Harga Terendah (7H)
+                    </p>
+                    <p id="modal-min-price" class="text-sm font-bold text-slate-800">Rp 0</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Harga Tertinggi (7H)
+                    </p>
+                    <p id="modal-max-price" class="text-sm font-bold text-slate-800">Rp 0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. FUNGSI SIDEBAR
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isOpen = sidebar.classList.contains('translate-x-0');
+
+            if (isOpen) {
+                sidebar.classList.replace('translate-x-0', '-translate-x-full');
+                overlay.classList.replace('opacity-100', 'opacity-0');
+                setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+            } else {
+                overlay.classList.remove('hidden');
+                sidebar.classList.replace('-translate-x-full', 'translate-x-0');
+                setTimeout(() => { overlay.classList.replace('opacity-0', 'opacity-100'); }, 10);
+            }
+        }
+
+        // 2. LOGIKA FILTER KATEGORI
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const bursaCards = document.querySelectorAll('.bursa-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset styling tombol
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-green-600', 'text-white', 'shadow-md', 'shadow-green-100', 'active');
+                        b.classList.add('bg-white', 'text-slate-500');
+                    });
+
+                    // Set tombol yang diklik jadi aktif
+                    btn.classList.remove('bg-white', 'text-slate-500');
+                    btn.classList.add('bg-green-600', 'text-white', 'shadow-md', 'shadow-green-100', 'active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    // Filter kartu
+                    bursaCards.forEach(card => {
+                        if (filterValue === 'semua') {
+                            card.style.display = 'flex';
+                        } else {
+                            // Cek apakah data-category kartu mengandung filterValue
+                            if (card.getAttribute('data-category').includes(filterValue)) {
+                                card.style.display = 'flex';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        // 3. LOGIKA CHART.JS DAN MODAL
+        let bursaChartInstance = null; // Menyimpan instance chart agar bisa di-destroy dan dirender ulang
+
+        function openDetailModal(itemName, currentPrice, percentage, status) {
+            const modal = document.getElementById('detail-modal');
+            const overlay = document.getElementById('modal-overlay');
+
+            // Set Text
+            document.getElementById('modal-item-name').innerText = itemName;
+            document.getElementById('modal-item-price').innerText = 'Rp ' + currentPrice.toLocaleString('id-ID');
+
+            const badge = document.getElementById('modal-item-badge');
+            badge.innerText = percentage;
+
+            let lineColor = '#64748b'; // Default Abu
+            let bgColor = 'rgba(100, 116, 139, 0.1)';
+
+            if (status === 'naik') {
+                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold text-white bg-red-500"; // Merah = Naik di komoditas
+                lineColor = '#ef4444';
+                bgColor = 'rgba(239, 68, 68, 0.1)';
+            } else if (status === 'turun') {
+                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold text-white bg-green-500"; // Hijau = Turun (murah)
+                lineColor = '#16a34a';
+                bgColor = 'rgba(22, 163, 74, 0.1)';
+            } else {
+                badge.className = "px-2 py-0.5 rounded text-[10px] font-bold text-white bg-slate-400";
+            }
+
+            // Bikin Data Dummy untuk Chart (7 Hari)
+            const labels = ['H-6', 'H-5', 'H-4', 'H-3', 'H-2', 'Kemarin', 'Hari Ini'];
+            let dataPoints = [];
+
+            // Generate data acak di sekitar currentPrice
+            for (let i = 0; i < 6; i++) {
+                let randomFluctuation = currentPrice * (Math.random() * 0.04 - 0.02); // fluktuasi +- 2%
+                dataPoints.push(currentPrice + randomFluctuation);
+            }
+            dataPoints.push(currentPrice); // Hari ini adalah harga asli
+
+            // Cari Min Max untuk ditamplkan di bawah chart
+            const maxPrice = Math.max(...dataPoints);
+            const minPrice = Math.min(...dataPoints);
+            document.getElementById('modal-max-price').innerText = 'Rp ' + Math.round(maxPrice).toLocaleString('id-ID');
+            document.getElementById('modal-min-price').innerText = 'Rp ' + Math.round(minPrice).toLocaleString('id-ID');
+
+            // Render Chart.js
+            const ctx = document.getElementById('bursaChart').getContext('2d');
+
+            // Hapus chart lama jika ada
+            if (bursaChartInstance) {
+                bursaChartInstance.destroy();
+            }
+
+            bursaChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Harga (Rp)',
+                        data: dataPoints,
+                        borderColor: lineColor,
+                        backgroundColor: bgColor,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: lineColor,
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4 // Membuat garis melengkung (smooth)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return 'Rp ' + Math.round(context.raw).toLocaleString('id-ID');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { borderDash: [5, 5] },
+                            ticks: { font: { family: 'Plus Jakarta Sans', size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Plus Jakarta Sans', size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Tampilkan Modal
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.replace('opacity-0', 'opacity-100');
+                overlay.classList.replace('pointer-events-none', 'pointer-events-auto');
+                modal.classList.replace('opacity-0', 'opacity-100');
+                modal.classList.replace('scale-95', 'scale-100');
+                modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+            }, 10);
+        }
+
+        function closeAllModals() {
+            const overlay = document.getElementById('modal-overlay');
+            const detailModal = document.getElementById('detail-modal');
+
+            overlay.classList.replace('opacity-100', 'opacity-0');
+            overlay.classList.replace('pointer-events-auto', 'pointer-events-none');
+            detailModal.classList.replace('opacity-100', 'opacity-0');
+            detailModal.classList.replace('scale-100', 'scale-95');
+            detailModal.classList.replace('pointer-events-auto', 'pointer-events-none');
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                detailModal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+
+</html>
