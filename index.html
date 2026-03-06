@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaniTrade - Bursa Komoditas Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            /* Sedikit lebih abu agar card lebih menonjol */
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        .trade-gradient {
+            background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+        }
+
+        /* Menyembunyikan scrollbar untuk area horizontal scroll */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden text-slate-900">
+    <div id="sidebar-overlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300">
+    </div>
+
+    <aside id="main-sidebar"
+        class="fixed lg:static inset-y-0 left-0 w-72 bg-white border-r border-slate-100 flex flex-col z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-20 flex items-center justify-between px-8 border-b border-slate-50">
+            <img src="assets/logo.png" alt="Logo" class="h-9 w-auto">
+            <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-red-500"><i
+                    class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+
+        <nav class="flex-1 px-6 py-6 space-y-2 overflow-y-auto hide-scrollbar">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Dashboard Utama</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-green-50 text-green-700 font-bold rounded-2xl"><i
+                    class="fa-solid fa-house-chimney w-5"></i> Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
+                    class="fa-solid fa-chart-line w-5"></i> Bursa Harga</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
+                    class="fa-solid fa-bullhorn w-5"></i> Permintaan Pasar</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
+                    class="fa-solid fa-box-open w-5"></i> Stok Saya</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl"><i
+                    class="fa-solid fa-handshake w-5"></i> Negosiasi</a>
+
+            <div class="pt-8 px-4">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Radar Sekitar</p>
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                        <span class="text-xs font-bold text-slate-700">12 Petani Aktif</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 leading-relaxed">Siap kirim hasil panen dalam radius 5km hari
+                        ini.</p>
+                </div>
+            </div>
+        </nav>
+    </aside>
+    <nav
+        class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-100 px-6 py-3 flex justify-between items-center z-[45] pb-safe">
+        <a href="#" class="flex flex-col items-center gap-1 text-green-600">
+            <i class="fa-solid fa-house-chimney text-lg"></i>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Beranda</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-slate-400">
+            <i class="fa-solid fa-chart-line text-lg"></i>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Bursa</span>
+        </a>
+        <div class="relative -top-5">
+            <button
+                class="w-14 h-14 bg-green-600 rounded-2xl text-white shadow-lg shadow-green-200 border-4 border-white flex items-center justify-center">
+                <i class="fa-solid fa-plus text-xl"></i>
+            </button>
+        </div>
+        <a href="#" class="flex flex-col items-center gap-1 text-slate-400 relative">
+            <i class="fa-solid fa-bullhorn text-lg"></i>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Pesanan</span>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+        </a>
+        <button onclick="toggleSidebar()" class="flex flex-col items-center gap-1 text-slate-400">
+            <i class="fa-solid fa-bars-staggered text-lg"></i>
+            <span class="text-[9px] font-bold uppercase tracking-tighter">Menu</span>
+        </button>
+    </nav>
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header
+            class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 z-20 shrink-0 sticky top-0">
+            <button onclick="toggleSidebar()"
+                class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 active:scale-95 transition-all">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+
+            <div class="lg:hidden absolute left-1/2 -translate-x-1/2">
+                <img src="assets/logo.png" alt="TaniTrade" class="h-9 w-auto object-contain">
+            </div>
+
+            <div
+                class="hidden lg:flex items-center gap-4 bg-slate-100 px-4 py-2 rounded-full w-96 focus-within:ring-2 focus-within:ring-green-500 transition-all">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                <input type="text" placeholder="Cari komoditas..."
+                    class="bg-transparent border-none outline-none text-sm w-full">
+            </div>
+
+            <div class="flex items-center gap-2 lg:gap-5">
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 relative">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute top-2.5 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-slate-200 mx-1 hidden lg:block"></div>
+                <img src="https://avatars.githubusercontent.com/u/130645424?v=4" alt="Profile"
+                    class="w-10 h-10 rounded-xl object-cover border-2 border-white shadow-sm">
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-8 pb-24">
+
+            <div
+                class="rounded-[1.5rem] p-6 lg:p-8 text-white relative overflow-hidden shadow-xl shadow-green-100/30 min-h-[280px] lg:min-h-[320px] flex items-center bg-white border border-slate-100">
+
+                <div class="absolute inset-0 z-0">
+                    <img src="assets/banner.png" alt="Background TaniTrade"
+                        class="w-full h-full object-cover object-right transition-transform duration-1000">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent lg:from-white/80">
+                    </div>
+                </div>
+
+                <div class="relative z-10 max-w-lg">
+                    <div
+                        class="inline-flex items-center gap-2 bg-green-600 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest mb-4 shadow-md">
+                        <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                        Pasar Buka
+                    </div>
+
+                    <h1 class="text-2xl lg:text-4xl font-black mb-2 leading-tight tracking-tight text-slate-800">
+                        Selamat Datang di <span class="text-green-600">TaniTrade!</span>
+                    </h1>
+
+                    <p class="text-slate-600 text-xs lg:text-sm mb-6 font-medium max-w-xs leading-relaxed">
+                        Bursa digital dua arah. Temukan pembeli terdekat atau jual hasil panen Anda secara instan.
+                    </p>
+
+                    <div class="relative max-w-sm group mb-6">
+                        <div
+                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-green-600">
+                            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                        </div>
+                        <input type="text" placeholder="Cari komoditas..."
+                            class="w-full pl-11 pr-4 py-3 bg-white text-slate-800 rounded-xl shadow-lg border border-slate-100 outline-none focus:ring-2 focus:ring-green-100 transition-all font-semibold text-xs placeholder:text-slate-400">
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button
+                            class="px-5 py-2.5 bg-slate-900 text-white text-xs font-bold rounded-xl hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-200">
+                            Jual Panen
+                        </button>
+                        <button
+                            class="px-5 py-2.5 bg-green-600 text-white text-xs font-bold rounded-xl hover:bg-green-700 transition-all active:scale-95 shadow-lg shadow-green-100">
+                            Tren Harga
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-xl lg:text-2xl font-bold text-slate-800">Radar Pesanan <span
+                                class="text-blue-600">Terdekat</span></h2>
+                        <span
+                            class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-1 rounded-full animate-pulse">LIVE</span>
+                    </div>
+                    <button class="text-sm font-bold text-blue-600 hover:text-blue-700">Lihat Peta <i
+                            class="fa-solid fa-map"></i></button>
+                </div>
+                <p class="text-sm text-slate-500 mb-6">Pabrik dan grosir di sekitar Anda sedang mencari komoditas ini.
+                </p>
+
+                <div class="flex gap-5 overflow-x-auto pb-6 hide-scrollbar">
+
+                    <div
+                        class="min-w-[300px] bg-white rounded-2xl p-5 card-shadow border border-blue-50 relative overflow-hidden shrink-0 group hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 text-[9px] font-bold rounded-bl-xl shadow-sm">
+                            URGENT</div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                    <i class="fa-solid fa-industry"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">PT. Saus Nusantara</h4>
+                                    <p class="text-[10px] text-slate-500"><i
+                                            class="fa-solid fa-location-arrow text-blue-500"></i> 3.2 km (Kab. Bandung)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3 mb-4 border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[11px] text-slate-500">Dibutuhkan:</span>
+                                <span class="font-bold text-slate-800 text-sm">Tomat Segar</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] text-slate-500">Volume:</span>
+                                <span class="font-bold text-blue-600">500 Kg</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400">Harga Penawaran</p>
+                                <p class="text-sm font-bold text-slate-800">Rp 7.500<span
+                                        class="text-[10px] font-normal">/kg</span></p>
+                            </div>
+                            <button
+                                onclick="openModal('modal-ambil', 'PT. Saus Nusantara', 'Tomat Segar', '500 Kg', 'Rp 7.500')"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors shadow-md shadow-blue-200">Ambil
+                                Pesanan</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-[300px] bg-white rounded-2xl p-5 card-shadow border border-slate-50 relative shrink-0 group hover:-translate-y-1 transition-transform duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                    <i class="fa-solid fa-store"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Grosir Pasar Induk</h4>
+                                    <p class="text-[10px] text-slate-500"><i
+                                            class="fa-solid fa-location-arrow text-orange-500"></i> 8.5 km (Kota
+                                        Bandung)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3 mb-4 border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[11px] text-slate-500">Dibutuhkan:</span>
+                                <span class="font-bold text-slate-800 text-sm">Cabai Merah</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] text-slate-500">Volume:</span>
+                                <span class="font-bold text-orange-600">2 Ton</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400">Harga Penawaran</p>
+                                <p class="text-sm font-bold text-slate-800">Rp 34.000<span
+                                        class="text-[10px] font-normal">/kg</span></p>
+                            </div>
+                            <button
+                                onclick="openModal('modal-nego', 'Grosir Pasar Induk', 'Cabai Merah', '2 Ton', 'Rp 34.000')"
+                                class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">Ajukan
+                                Nego</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-[300px] bg-white rounded-2xl p-5 card-shadow border border-yellow-50 relative overflow-hidden shrink-0 group hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="absolute top-0 right-0 bg-yellow-500 text-white px-3 py-1 text-[9px] font-bold rounded-bl-xl shadow-sm">
+                            KONTRAK</div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-yellow-50 text-yellow-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                    <i class="fa-solid fa-industry"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Pabrik Keripik Frito</h4>
+                                    <p class="text-[10px] text-slate-500"><i
+                                            class="fa-solid fa-location-arrow text-yellow-500"></i> 12.1 km (Kab.
+                                        Bandung Barat)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3 mb-4 border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[11px] text-slate-500">Dibutuhkan:</span>
+                                <span class="font-bold text-slate-800 text-sm">Kentang Dieng</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] text-slate-500">Volume:</span>
+                                <span class="font-bold text-yellow-600">5 Ton / Bulan</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400">Harga Penawaran</p>
+                                <p class="text-sm font-bold text-slate-800">Rp 16.500<span
+                                        class="text-[10px] font-normal">/kg</span></p>
+                            </div>
+                            <button
+                                onclick="openModal('modal-sampel', 'Pabrik Keripik Frito', 'Kentang Dieng', '5 Ton', 'Rp 16.500')"
+                                class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-yellow-600 transition-colors shadow-md shadow-yellow-200">Kirim
+                                Sampel</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-[300px] bg-white rounded-2xl p-5 card-shadow border border-green-50 relative shrink-0 group hover:-translate-y-1 transition-transform duration-300">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Supermarket Segar Jaya</h4>
+                                    <p class="text-[10px] text-slate-500"><i
+                                            class="fa-solid fa-location-arrow text-green-500"></i> 4.5 km (Kota Cimahi)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3 mb-4 border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[11px] text-slate-500">Dibutuhkan:</span>
+                                <span class="font-bold text-slate-800 text-sm">Beras Premium</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] text-slate-500">Volume:</span>
+                                <span class="font-bold text-green-600">800 Kg</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400">Harga Penawaran</p>
+                                <p class="text-sm font-bold text-slate-800">Rp 14.800<span
+                                        class="text-[10px] font-normal">/kg</span></p>
+                            </div>
+                            <button
+                                onclick="openModal('modal-nego', 'Supermarket Segar Jaya', 'Beras Premium', '800 Kg', 'Rp 14.800')"
+                                class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">Ajukan
+                                Nego</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-[300px] bg-white rounded-2xl p-5 card-shadow border border-purple-50 relative overflow-hidden shrink-0 group hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="absolute top-0 right-0 bg-purple-500 text-white px-3 py-1 text-[9px] font-bold rounded-bl-xl shadow-sm">
+                            BUTUH CEPAT</div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                    <i class="fa-solid fa-truck-fast"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Agen Pengepul Makmur</h4>
+                                    <p class="text-[10px] text-slate-500"><i
+                                            class="fa-solid fa-location-arrow text-purple-500"></i> 15.0 km (Garut)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3 mb-4 border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[11px] text-slate-500">Dibutuhkan:</span>
+                                <span class="font-bold text-slate-800 text-sm">Bawang Merah</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] text-slate-500">Volume:</span>
+                                <span class="font-bold text-purple-600">1.5 Ton</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400">Harga Penawaran</p>
+                                <p class="text-sm font-bold text-slate-800">Rp 26.500<span
+                                        class="text-[10px] font-normal">/kg</span></p>
+                            </div>
+                            <button
+                                onclick="openModal('modal-ambil', 'Agen Pengepul Makmur', 'Bawang Merah', '1500 Kg', 'Rp 26.500')"
+                                class="bg-purple-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-purple-700 transition-colors shadow-md shadow-purple-200">Ambil
+                                Pesanan</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="min-w-[200px] bg-white rounded-2xl p-5 card-shadow border border-slate-50 relative shrink-0 flex items-center justify-center flex-col gap-3 cursor-pointer hover:bg-slate-50 transition-colors group">
+                        <div
+                            class="w-14 h-14 bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 rounded-full flex items-center justify-center text-slate-400 transition-colors">
+                            <i
+                                class="fa-solid fa-arrow-right-long text-xl group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                        <p
+                            class="text-sm font-bold text-slate-600 group-hover:text-blue-600 transition-colors text-center">
+                            Lihat 20+<br>Permintaan Lain</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Harga Bursa <span
+                                class="text-green-600">Global</span></h2>
+                        <p class="text-sm text-slate-500 font-medium mt-1">Transaksi langsung (Beli/Jual) sesuai harga
+                            pasar real-time.</p>
+                    </div>
+                    <div
+                        class="hidden md:flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="relative flex h-3 w-3">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-[10px] font-bold text-slate-600 tracking-widest uppercase">Pasar Aktif</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+                    <div
+                        class="bg-white rounded-[2rem] p-6 card-shadow border border-slate-100 hover:border-green-300 transition-all duration-300 group flex flex-col">
+                        <div class="relative mb-5 overflow-hidden rounded-2xl h-40 shadow-inner">
+                            <img src="https://images.unsplash.com/photo-1588013273468-315fd88ea34c?auto=format&fit=crop&w=500&q=80"
+                                alt="Cabai Merah"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div
+                                class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full shadow-sm text-[10px] font-bold text-green-600 flex items-center gap-1">
+                                <i class="fa-solid fa-up-long"></i> +2.4%
+                            </div>
+                        </div>
+
+                        <h3 class="font-bold text-slate-800 text-lg mb-2">Cabai Merah Keriting</h3>
+                        <p class="text-[11px] text-slate-500 mb-6 leading-relaxed italic">"Kualitas super dengan tingkat
+                            kepedasan stabil. Cocok untuk pasokan industri sambal."</p>
+
+                        <div class="space-y-3 mt-auto">
+                            <div
+                                class="flex items-center justify-between p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-green-700 uppercase tracking-widest">Beli</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 36.000</p>
+                                </div>
+                                <button onclick="openTradeModal('BELI', 'Cabai Merah Keriting', '36.000')"
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md shadow-green-200">BELI</button>
+                            </div>
+
+                            <div
+                                class="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-blue-700 uppercase tracking-widest">Jual</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 32.000</p>
+                                </div>
+                                <button onclick="openTradeModal('JUAL', 'Cabai Merah Keriting', '32.000')"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md shadow-blue-200">JUAL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-[2rem] p-6 card-shadow border border-slate-100 hover:border-green-300 transition-all duration-300 group flex flex-col">
+                        <div class="relative mb-5 overflow-hidden rounded-2xl h-40">
+                            <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80"
+                                alt="Tomat"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div
+                                class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm text-[10px] font-bold text-red-500 flex items-center gap-1">
+                                <i class="fa-solid fa-down-long"></i> -0.8%
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-2">Tomat Rose Segar</h3>
+                        <p class="text-[11px] text-slate-500 mb-6 leading-relaxed italic">"Kulit kencang dan daging
+                            tebal. Pilihan terbaik untuk retail dan konsumsi harian."</p>
+                        <div class="space-y-3 mt-auto">
+                            <div
+                                class="flex items-center justify-between p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-green-700 uppercase tracking-widest">Beli</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 8.500</p>
+                                </div>
+                                <button onclick="openTradeModal('BELI', 'Tomat Rose Segar', '8.500')"
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md">BELI</button>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-blue-700 uppercase tracking-widest">Jual</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 7.000</p>
+                                </div>
+                                <button onclick="openTradeModal('JUAL', 'Tomat Rose Segar', '7.000')"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md">JUAL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-[2rem] p-6 card-shadow border border-slate-100 hover:border-green-300 transition-all duration-300 group flex flex-col">
+                        <div class="relative mb-5 overflow-hidden rounded-2xl h-40">
+                            <img src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=500&q=80"
+                                alt="Bawang"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div
+                                class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm text-[10px] font-bold text-slate-500">
+                                STABIL</div>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-2">Bawang Merah Brebes</h3>
+                        <p class="text-[11px] text-slate-500 mb-6 leading-relaxed italic">"Kering sempurna dengan aroma
+                            tajam. Stok melimpah langsung dari pusat petani Brebes."</p>
+                        <div class="space-y-3 mt-auto">
+                            <div
+                                class="flex items-center justify-between p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-green-700 uppercase tracking-widest">Beli</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 28.000</p>
+                                </div>
+                                <button onclick="openTradeModal('BELI', 'Bawang Merah Brebes', '28.000')"
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md">BELI</button>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-blue-700 uppercase tracking-widest">Jual</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 25.000</p>
+                                </div>
+                                <button onclick="openTradeModal('JUAL', 'Bawang Merah Brebes', '25.000')"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md">JUAL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-[2rem] p-6 card-shadow border border-slate-100 hover:border-green-300 transition-all duration-300 group flex flex-col">
+                        <div class="relative mb-5 overflow-hidden rounded-2xl h-40">
+                            <img src="https://images.unsplash.com/photo-1586201375761-83865001e8ac?auto=format&fit=crop&w=500&q=80"
+                                alt="Beras"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div
+                                class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm text-[10px] font-bold text-green-600">
+                                +1.2%</div>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-2">Beras Pandan Wangi</h3>
+                        <p class="text-[11px] text-slate-500 mb-6 leading-relaxed italic">"Beras premium murni tanpa
+                            pemutih. Pulen dan harum alami khas Cianjur."</p>
+                        <div class="space-y-3 mt-auto">
+                            <div
+                                class="flex items-center justify-between p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-green-700 uppercase tracking-widest">Beli</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 15.000</p>
+                                </div>
+                                <button onclick="openTradeModal('BELI', 'Beras Pandan Wangi', '15.000')"
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold rounded-lg transition-colors shadow-md">BELI</button>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                <div>
+                                    <p class="text-[9px] font-bold text-blue-700 uppercase tracking-widest">Jual</p>
+                                    <p class="font-black text-slate-800 text-sm">Rp 13.500</p>
+                                </div>
+                                <button onclick="openTradeModal('JUAL', 'Beras Pandan Wangi', '13.500')"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition-colors shadow-md">JUAL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-[1.5rem] p-6 card-shadow border border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-800 text-lg">Aktivitas Transaksi Terbaru</h3>
+                        <button class="text-sm text-green-600 font-medium hover:underline">Lihat Riwayat</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div
+                            class="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl border border-slate-100">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">Penjualan Berhasil (Ke Pabrik)</p>
+                                    <p class="text-[10px] text-slate-500">200kg Cabai Merah ke PT. Saus Nusantara</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-green-600">+Rp 6.400.000</p>
+                                <p class="text-[10px] text-slate-400">Hari ini, 09:15</p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl border border-slate-100">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-cart-shopping text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">Pembelian via Bursa</p>
+                                    <p class="text-[10px] text-slate-500">50kg Beras Pandan Wangi</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-slate-600">-Rp 750.000</p>
+                                <p class="text-[10px] text-slate-400">Kemarin, 14:30</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-[1.5rem] p-6 card-shadow border border-slate-700 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
+                    </div>
+                    <div class="relative z-10 w-full">
+                        <div
+                            class="w-16 h-16 bg-yellow-400/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-400/30">
+                            <i class="fa-solid fa-crown text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-1">Status Akun</h3>
+                        <p
+                            class="text-[11px] font-medium text-green-400 bg-green-400/10 px-3 py-1 rounded-full inline-block mb-4 border border-green-400/20">
+                            Petani Unggul</p>
+                        <p class="text-xs text-slate-300 mb-6">Volume transaksi Anda bulan ini telah mencapai target.
+                            Anda berhak mendapat potongan biaya admin 50%.</p>
+                        <button
+                            class="w-full py-3 bg-yellow-400 text-yellow-900 rounded-xl text-sm font-bold hover:bg-yellow-300 transition-colors shadow-[0_0_15px_rgba(250,204,21,0.3)]">Klaim
+                            Reward</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <div
+        class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-100 h-20 flex items-center justify-around px-2 z-50 pb-2">
+        <button class="text-green-600 flex flex-col items-center gap-1 w-16">
+            <div class="w-10 h-10 flex items-center justify-center bg-green-50 rounded-2xl">
+                <i class="fa-solid fa-house-chimney text-lg"></i>
+            </div>
+            <span class="text-[10px] font-bold tracking-tight">Home</span>
+        </button>
+
+        <button class="text-slate-400 flex flex-col items-center gap-1 w-16 relative">
+            <i class="fa-solid fa-bullhorn text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Pesanan</span>
+            <span class="absolute top-0 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+        </button>
+
+        <div class="relative -top-6">
+            <div
+                class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white border-8 border-[#f8fafc] shadow-xl shadow-green-200 cursor-pointer active:scale-90 transition-transform">
+                <i class="fa-solid fa-plus text-2xl"></i>
+            </div>
+            <span
+                class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-extrabold text-slate-800 uppercase">Jual</span>
+        </div>
+
+        <button class="text-slate-400 flex flex-col items-center gap-1 w-16">
+            <i class="fa-solid fa-wallet text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Saldo</span>
+        </button>
+
+        <button class="text-slate-400 flex flex-col items-center gap-1 w-16">
+            <i class="fa-solid fa-circle-user text-lg"></i>
+            <span class="text-[10px] font-bold tracking-tight">Profil</span>
+        </button>
+    </div>
+    <div id="modal-overlay"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+        onclick="closeAllModals()"></div>
+
+    <div id="modal-ambil"
+        class="fixed inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none scale-95 transition-all duration-300">
+        <div class="bg-white w-full max-w-md rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-blue-600 p-6 text-white relative">
+                <button onclick="closeAllModals()"
+                    class="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"><i
+                        class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-extrabold text-xl mb-1">Konfirmasi Pesanan</h3>
+                <p class="text-blue-100 text-xs">Pastikan stok Anda siap sebelum mengambil pesanan ini.</p>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div class="bg-blue-50 rounded-xl p-4 mb-6 border border-blue-100 flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm">
+                        <i class="fa-solid fa-industry"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase" id="ambil-company">NAMA PERUSAHAAN</p>
+                        <p class="font-bold text-slate-800 text-lg" id="ambil-item">NAMA ITEM</p>
+                        <p class="text-sm font-bold text-blue-600" id="ambil-price">HARGA</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">Berapa Kg yang bisa Anda
+                            penuhi?</label>
+                        <div
+                            class="flex items-center border border-slate-200 rounded-xl overflow-hidden focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+                            <input type="number" id="ambil-qty-input"
+                                class="w-full px-4 py-3 outline-none text-slate-800 font-bold">
+                            <span
+                                class="bg-slate-50 px-4 py-3 text-slate-500 font-bold border-l border-slate-200">Kg</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">Metode Pengiriman</label>
+                        <select
+                            class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none text-sm font-medium focus:border-blue-500">
+                            <option>Saya antar sendiri ke lokasi pembeli</option>
+                            <option>Minta dijemput oleh armada pembeli</option>
+                            <option>Gunakan kurir TaniTrade</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-slate-50">
+                <button onclick="alert('Pesanan berhasil diambil! Pembeli akan segera dihubungi.'); closeAllModals();"
+                    class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-colors">Konfirmasi
+                    & Ambil Transaksi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-nego"
+        class="fixed inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none scale-95 transition-all duration-300">
+        <div class="bg-white w-full max-w-md rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-slate-800 p-6 text-white relative">
+                <button onclick="closeAllModals()"
+                    class="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"><i
+                        class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-extrabold text-xl mb-1">Ajukan Penawaran Baru</h3>
+                <p class="text-slate-300 text-xs">Tawarkan harga yang sesuai dengan kualitas panen Anda.</p>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase">Pembeli</p>
+                        <p class="font-bold text-slate-800 text-sm" id="nego-company">NAMA</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-500 font-bold uppercase">Permintaan Awal</p>
+                        <p class="font-bold text-red-500 text-sm" id="nego-price">HARGA</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">Harga Tawaran Anda (Per Kg)</label>
+                        <div
+                            class="flex items-center border border-slate-200 rounded-xl overflow-hidden focus-within:border-slate-800 focus-within:ring-2 focus-within:ring-slate-100 transition-all">
+                            <span
+                                class="bg-slate-50 px-4 py-3 text-slate-500 font-bold border-r border-slate-200">Rp</span>
+                            <input type="number" placeholder="Misal: 35000"
+                                class="w-full px-4 py-3 outline-none text-slate-800 font-bold text-lg">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">Pesan Untuk Pembeli
+                            (Opsional)</label>
+                        <textarea rows="2" placeholder="Jelaskan keunggulan panen Anda..."
+                            class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none text-sm focus:border-slate-800"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-slate-50">
+                <button onclick="alert('Penawaran Anda telah dikirim! Menunggu respon pembeli.'); closeAllModals();"
+                    class="w-full py-3.5 bg-slate-900 hover:bg-black text-white font-bold rounded-xl shadow-lg transition-colors">Kirim
+                    Pengajuan Nego</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-sampel"
+        class="fixed inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none scale-95 transition-all duration-300">
+        <div class="bg-white w-full max-w-md rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-yellow-500 p-6 text-white relative">
+                <button onclick="closeAllModals()"
+                    class="absolute top-4 right-4 w-8 h-8 bg-black/10 rounded-full flex items-center justify-center hover:bg-black/20 transition-colors"><i
+                        class="fa-solid fa-xmark text-yellow-900"></i></button>
+                <h3 class="font-extrabold text-xl mb-1 text-yellow-900">Pengiriman Sampel</h3>
+                <p class="text-yellow-800 text-xs">Pabrik membutuhkan sampel fisik sebelum menyetujui kontrak.</p>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div class="bg-yellow-50 rounded-xl p-4 mb-6 border border-yellow-200">
+                    <p class="text-sm font-bold text-slate-800 mb-1" id="sampel-item">KOMODITAS</p>
+                    <p class="text-xs text-slate-600">Tujuan: <span class="font-bold text-yellow-700"
+                            id="sampel-company">PABRIK</span></p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">Berat Sampel</label>
+                        <select
+                            class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none text-sm font-medium focus:border-yellow-500">
+                            <option>1 Kg (Standar)</option>
+                            <option>2 Kg</option>
+                            <option>5 Kg</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">Jasa Pengiriman</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label
+                                class="flex items-center gap-2 p-3 border border-yellow-500 bg-yellow-50 rounded-xl cursor-pointer">
+                                <input type="radio" name="kurir" checked class="text-yellow-600">
+                                <span class="text-xs font-bold">JNE Cargo</span>
+                            </label>
+                            <label
+                                class="flex items-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer">
+                                <input type="radio" name="kurir">
+                                <span class="text-xs font-bold">TaniExpress</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+                        <p class="font-bold text-slate-700 mb-1">Alamat Penjemputan:</p>
+                        <p class="text-slate-500">Lapak Kader Jaelani, Jl. Tani Makmur No.12, Kab. Bandung</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-slate-50">
+                <button onclick="alert('Permintaan kurir berhasil! Silakan siapkan sampel Anda.'); closeAllModals();"
+                    class="w-full py-3.5 bg-yellow-500 hover:bg-yellow-600 text-yellow-900 font-bold rounded-xl shadow-lg shadow-yellow-200 transition-colors">Request
+                    Penjemputan Kurir</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-overlay"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-opacity duration-300"
+        onclick="closeAllModals()"></div>
+
+    <div id="trade-modal"
+        class="fixed inset-0 z-[110] flex items-center justify-center px-4 opacity-0 pointer-events-none scale-95 transition-all duration-300">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+
+            <div id="modal-header" class="p-8 text-white relative">
+                <button onclick="closeAllModals()"
+                    class="absolute top-6 right-6 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"><i
+                        class="fa-solid fa-xmark"></i></button>
+                <div id="modal-badge"
+                    class="px-3 py-1 bg-white/20 w-fit rounded-lg text-[10px] font-black tracking-widest uppercase mb-2">
+                    MODE</div>
+                <h3 id="modal-title" class="font-extrabold text-2xl mb-1">Judul Modal</h3>
+                <p id="modal-subtitle" class="text-white/70 text-xs font-medium">Deskripsi instruksi di sini.</p>
+            </div>
+
+            <div class="p-8 overflow-y-auto space-y-6">
+                <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div id="item-icon-bg"
+                        class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-sm bg-white">
+                        <i id="item-icon" class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Komoditas</p>
+                        <p id="target-item" class="font-bold text-slate-800 text-lg">Nama Barang</p>
+                        <p id="target-price" class="text-sm font-bold text-green-600">Harga</p>
+                    </div>
+                </div>
+
+                <div id="dynamic-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Jumlah
+                            Transaksi</label>
+                        <div class="flex items-center border border-slate-200 rounded-2xl overflow-hidden focus-within:ring-2 transition-all"
+                            id="input-ring">
+                            <input type="number" id="trade-qty"
+                                class="w-full px-5 py-4 outline-none text-slate-800 font-bold text-lg" value="100">
+                            <span
+                                class="bg-slate-50 px-5 py-4 text-slate-400 font-bold border-l border-slate-200">Kg</span>
+                        </div>
+                    </div>
+
+                    <div id="extra-fields" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="p-8 border-t border-slate-100 bg-slate-50/50">
+                <button id="modal-submit-btn"
+                    class="w-full py-4 rounded-2xl text-white font-black shadow-lg transition-all active:scale-95">
+                    KONFIRMASI
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script-index.js"></script>
+</body>
+
+</html>
